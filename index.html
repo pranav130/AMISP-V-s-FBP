@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AMISP Feeder Mapping · UPPCL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: collapsible left menu │ fixed header + shared filter bar │ one page-fit section at a time */
+:root{
+  --bg:#f3f5f9; --panel:#ffffff; --side:#ffffff; --ink:#13213a; --ink-2:#475873; --ink-3:#7b8aa3; --line:#dde3ec; --line-2:#eef1f6;
+  --brand:#0d4c92; --brand-2:#1f6fc5; --brand-soft:#e5eefa; --brand-ink:#ffffff;
+  --ok:#17834f; --ok-soft:#e2f4ea; --warn:#b8720a; --warn-soft:#fcf1dc; --bad:#c0362c; --bad-soft:#fbe5e2;
+  --c1:#1f8a5b; --c2:#e0a42b; --c3:#d9622b; --c4:#7b5cc4; --c5:#3d8fd1; --c6:#a8b3c4;
+  --f-sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --f-cond:"IBM Plex Sans Condensed","Arial Narrow",var(--f-sans);
+  --f-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --r:10px; --sw:250px;
+}
+:root[data-theme="dark"]{
+  --bg:#0e1521; --panel:#162030; --side:#121b29; --ink:#e7edf6; --ink-2:#a9b6ca; --ink-3:#7d8ba1; --line:#26344a; --line-2:#1c2738;
+  --brand:#78aaf0; --brand-2:#9cc2f7; --brand-soft:#1b2b45; --brand-ink:#0e1521;
+  --ok:#4cc38a; --ok-soft:#163226; --warn:#f0b549; --warn-soft:#342914; --bad:#f07a70; --bad-soft:#3a1d1b;
+  --c1:#4cc38a; --c2:#f0b549; --c3:#f08a52; --c4:#a58cf0; --c5:#6cb3ef; --c6:#5c6a80; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:14px/1.5 var(--f-sans);-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;text-wrap:balance}
+.num,td.n,th.n{font-variant-numeric:tabular-nums}
+svg.ic{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── app shell ── */
+.app{display:grid;grid-template-columns:var(--sw) minmax(0,1fr);min-height:100vh;align-items:start;transition:grid-template-columns .2s}
+.app.collapsed{--sw:68px}
+.side{background:var(--side);border-right:1px solid var(--line);display:flex;flex-direction:column;min-width:0;overflow:hidden;position:sticky;top:0;height:100vh;height:100dvh;z-index:6}
+.brand{display:flex;gap:12px;align-items:center;padding:16px 16px;border-bottom:1px solid var(--line);min-height:72px}
+.logo{width:38px;height:38px;border-radius:9px;background:var(--brand);color:var(--brand-ink);display:grid;place-items:center;flex:none}
+.logo svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2}
+.brand b{display:block;font:700 15px/1.2 var(--f-sans);white-space:nowrap}
+.brand small{display:block;color:var(--ink-3);font-size:12px;white-space:nowrap}
+.nav{display:grid;gap:4px;padding:12px 10px;overflow-y:auto;flex:1;align-content:start}
+.nav-label{font:600 10.5px var(--f-cond);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);padding:6px 10px 2px;white-space:nowrap}
+.nav a{display:flex;gap:12px;align-items:center;padding:10px 12px;border-radius:8px;color:var(--ink-2);text-decoration:none;font-weight:500;white-space:nowrap;position:relative}
+.nav a:hover{background:var(--line-2);color:var(--ink)}
+.nav a[aria-current="page"]{background:var(--brand-soft);color:var(--brand);font-weight:600}
+.nav a[aria-current="page"]::before{content:"";position:absolute;left:-10px;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:var(--brand)}
+.nav a .cnt{margin-left:auto;font:500 11px var(--f-mono);background:var(--bad-soft);color:var(--bad);border-radius:999px;padding:1px 7px}
+.side-foot{padding:12px 10px;border-top:1px solid var(--line)}
+.collapse{width:100%;display:flex;gap:10px;align-items:center;justify-content:center;background:var(--panel);border:1px solid var(--line);color:var(--ink-2);border-radius:8px;padding:8px;cursor:pointer;font:500 13px var(--f-sans)}
+.collapse:hover{color:var(--ink);border-color:var(--ink-3)}
+.app.collapsed .brand-txt,.app.collapsed .nav a span,.app.collapsed .nav-label,.app.collapsed .collapse span,.app.collapsed .nav a .cnt{display:none}
+.app.collapsed .nav a{justify-content:center;padding:10px}
+.app.collapsed .collapse svg{transform:rotate(180deg)}
+.app.collapsed .brand{justify-content:center;padding-inline:0}
+
+.main{display:flex;flex-direction:column;min-width:0;min-height:100vh;padding:16px 22px 18px;gap:12px}
+/* header */
+.hdr{display:grid;gap:10px}
+.hdr-row{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:space-between}
+.title{display:flex;gap:12px;align-items:center;min-width:0}
+.title>div{min-width:0}
+.title .logo{width:34px;height:34px;border-radius:8px}
+.title h1{font:700 22px/1.2 var(--f-sans);letter-spacing:-.01em}
+.title p{margin:2px 0 0;color:var(--ink-2);font-size:13px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{display:inline-flex;gap:8px;align-items:center;font:600 13px var(--f-sans);background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 12px;cursor:pointer}
+.btn:hover{border-color:var(--ink-3)}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.icon{padding:8px 10px}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill-s{display:inline-flex;gap:7px;align-items:center;font:500 12px var(--f-mono);border:1px solid var(--line);background:var(--panel);color:var(--ink-2);border-radius:999px;padding:4px 11px;white-space:nowrap}
+.pill-s b{font-weight:600;color:var(--ink)}
+.pill-s.live{border-color:color-mix(in srgb,var(--ok) 45%,transparent);background:var(--ok-soft);color:var(--ok)}
+.pill-s.live b{color:var(--ok)}
+.pill-s.live i{width:7px;height:7px;border-radius:50%;background:var(--ok)}
+.pill-s.scope{border-color:color-mix(in srgb,var(--warn) 40%,transparent);background:var(--warn-soft);color:var(--warn)}
+
+/* filter bar */
+.filters{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:12px 16px;display:flex;flex-wrap:wrap;gap:12px 18px;align-items:flex-end}
+.fld{display:grid;gap:5px}
+.fld>span{font:600 11px var(--f-cond);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+select,input[type=search]{font:14px var(--f-sans);color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:7px 10px;min-width:0}
+select{min-width:190px}
+select:focus-visible,input:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--brand-2);outline-offset:2px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--panel)}
+.seg button{font:500 13px var(--f-sans);background:transparent;color:var(--ink-2);border:0;padding:7px 13px;cursor:pointer}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--brand);color:var(--brand-ink)}
+.filters .grow{flex:1}
+
+/* section viewport */
+.view{flex:1}
+.page{display:flex;flex-direction:column;gap:12px}
+.page[hidden]{display:none!important}
+.page-head{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;justify-content:space-between}
+.page-head:has(>.btn){align-items:center}
+.page-head h2{font:600 17px/1.3 var(--f-sans)}
+.page-head p{margin:0;color:var(--ink-3);font-size:12.5px}
+
+/* KPI cards */
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--kc,var(--brand));border-radius:var(--r);padding:11px 14px;display:grid;gap:2px;align-content:start;min-width:0}
+.kpi .k{font:600 11px/1.3 var(--f-cond);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+.kpi .v{font:600 25px/1.15 var(--f-mono);letter-spacing:-.02em;color:var(--vc,var(--ink))}
+.kpi .s{font-size:12px;color:var(--ink-3)}
+.meter{height:5px;border-radius:3px;background:var(--line-2);overflow:hidden;margin-top:5px}
+.meter b{display:block;height:100%;background:var(--ok)}
+
+/* cards */
+.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-width:0;min-height:0}
+.card header{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;justify-content:space-between}
+.card h3{font:600 15px/1.3 var(--f-sans)}
+.card .note{color:var(--ink-3);font-size:12px;margin:2px 0 0}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:2px;display:inline-block}
+
+/* stacked bars */
+.sbars{display:grid;gap:5px;align-content:start}
+.srow{display:grid;grid-template-columns:minmax(110px,150px) 1fr minmax(52px,62px);gap:10px;align-items:center}
+.srow .lab{font-size:13px;line-height:1.2}
+.srow .lab b{font-weight:600}
+.srow .lab small{display:block;color:var(--ink-3);font-size:11px}
+.track{display:flex;height:17px;border-radius:4px;overflow:hidden;background:var(--line-2)}
+.track span{height:100%;min-width:0;transition:opacity .15s}
+.track:hover span{opacity:.55}.track span:hover{opacity:1}
+.srow .pct{font:500 13px var(--f-mono);text-align:right}
+.srow.total{border-top:1px solid var(--line);padding-top:7px}
+.defs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 20px;font-size:12px;color:var(--ink-2);border-top:1px solid var(--line-2);padding-top:10px}
+.defs b{color:var(--ink)}
+
+/* tables */
+.tscroll{border:1px solid var(--line);border-radius:8px;background:var(--panel)}
+.filters[hidden],.fld[hidden]{display:none!important}
+.more{align-self:center}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line-2);text-align:left;white-space:normal}
+td.n,td.pct,td .inbar,td.nw{white-space:nowrap}
+thead th{position:sticky;top:0;background:var(--panel);z-index:1;font:600 11px/1.25 var(--f-cond);letter-spacing:.05em;text-transform:uppercase;color:var(--ink-2);border-bottom:1px solid var(--line);vertical-align:bottom;white-space:normal}
+th.n,td.n{text-align:right}
+th button{all:unset;cursor:pointer;display:inline-flex;gap:4px;align-items:center}
+th button::after{content:"↕";opacity:.35;font-size:10px}
+th[aria-sort="ascending"] button::after{content:"↑";opacity:1}
+th[aria-sort="descending"] button::after{content:"↓";opacity:1}
+tbody tr:hover td{background:var(--brand-soft)}
+tr.sub td{background:var(--line-2);font-weight:600}
+tr.grand td{background:var(--brand-soft);font-weight:700;border-top:2px solid var(--brand)}
+tr.dim td{color:var(--ink-3)}
+td.pct{font-family:var(--f-mono)}
+.pill{display:inline-block;border-radius:999px;padding:1px 8px;font-size:12px;font-weight:500;white-space:nowrap}
+.p-ok{background:var(--ok-soft);color:var(--ok)}.p-warn{background:var(--warn-soft);color:var(--warn)}.p-bad{background:var(--bad-soft);color:var(--bad)}
+.inbar{display:flex;align-items:center;gap:8px;justify-content:flex-end}
+.inbar .b{width:48px;height:6px;background:var(--line-2);border-radius:3px;overflow:hidden}
+.inbar .b i{display:block;height:100%}
+.colnum{display:block;color:var(--ink-3);font:400 10px var(--f-mono);letter-spacing:0;text-transform:none}
+#reportTable td,#reportTable th{padding:6px 8px}
+#excTable td{vertical-align:top}
+#circleTable th,#circleTable td{padding:7px 8px}
+
+#excTable,#circleTable{table-layout:fixed}
+#excTable td,#circleTable td{overflow-wrap:anywhere}
+#excTable td.mono{white-space:normal}
+#excTable .pill{white-space:normal}
+#excTable td.nw{white-space:normal}
+
+/* chips / toolbar */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:500 12px var(--f-sans);border:1px solid var(--line);background:var(--panel);color:var(--ink-2);border-radius:999px;padding:5px 12px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.chip i{width:8px;height:8px;border-radius:50%}
+.chip b{font-family:var(--f-mono);font-weight:500;color:var(--ink)}
+.chip[aria-pressed="true"]{border-color:var(--brand);background:var(--brand-soft);color:var(--brand)}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.toolbar input{flex:1 1 260px}
+.muted{color:var(--ink-3);font-size:12px}
+.mono{font-family:var(--f-mono);font-size:12px}
+
+/* method page */
+.method{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px;align-content:start}
+.method .card p,.method .card li{color:var(--ink-2);font-size:13px;margin:0}
+.method .card ul,.method .card ol{margin:0;padding-left:18px;display:grid;gap:5px}
+.method code{font:12px var(--f-mono);background:var(--line-2);border-radius:4px;padding:1px 5px;color:var(--ink)}
+
+.tip{position:fixed;pointer-events:none;background:var(--panel);color:var(--ink);border:1px solid var(--line);box-shadow:0 8px 28px rgba(10,20,40,.18);border-radius:8px;padding:8px 10px;font-size:12px;z-index:30;max-width:280px;opacity:0;transition:opacity .1s}
+.tip b{display:block;margin-bottom:2px}
+.foot{color:var(--ink-3);font-size:11.5px;display:flex;flex-wrap:wrap;gap:4px 16px;justify-content:space-between}
+
+/* responsive: below 1100px pages scroll naturally; phone: menu becomes a top strip */
+@media (max-width:1250px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:1100px){
+  .duo{grid-template-columns:1fr}
+  .tscroll{overflow-x:auto}
+}
+@media (max-width:760px){
+  .app,.app.collapsed{grid-template-columns:minmax(0,1fr)}
+  .main{min-height:0}
+  .pill-s{white-space:normal}
+  .hdr-row,.pills{min-width:0}
+  .side{position:sticky;top:0;height:auto;z-index:10;border-right:0;border-bottom:1px solid var(--line)}
+  .brand,.side-foot,.nav-label{display:none}
+  .nav{display:flex;overflow-x:auto;padding:6px 10px;gap:4px}
+  .nav a{padding:8px 10px;font-size:13px}
+  .nav a[aria-current="page"]::before{display:none}
+  .app.collapsed .nav a span{display:inline}
+  .main{padding:12px max(16px,env(safe-area-inset-right,0px)) 16px max(16px,env(safe-area-inset-left,0px))}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  select{min-width:0;width:100%}
+  .fld{flex:1 1 140px}
+  .defs{grid-template-columns:1fr}
+  .srow{grid-template-columns:92px 1fr 48px}
+  .title h1{font-size:18px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <aside class="side" aria-label="Sections">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></div>
+      <div class="brand-txt"><b>AMISP Feeder Mapping</b><small>UPPCL · Feeder metering</small></div>
+    </div>
+    <nav class="nav" id="nav">
+      <div class="nav-label">Analysis</div>
+      <a href="#overview" data-p="overview" title="Overview"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg><span>Overview</span></a>
+      <a href="#report" data-p="report" title="Status report"><svg class="ic" viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/></svg><span>Status report</span></a>
+      <a href="#sources" data-p="sources" title="Lookup and master"><svg class="ic" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg><span>Lookup &amp; AMISP master</span></a>
+      <a href="#circles" data-p="circles" title="Circle-wise analysis"><svg class="ic" viewBox="0 0 24 24"><path d="M3 21h18M6 21V10M11 21V4M16 21v-7M21 21V8"/></svg><span>Circle-wise analysis</span></a>
+      <div class="nav-label">Action</div>
+      <a href="#exceptions" data-p="exceptions" title="Feeders needing correction"><svg class="ic" viewBox="0 0 24 24"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17v.5"/></svg><span>Feeders to correct</span><em class="cnt" id="navCnt"></em></a>
+      <div class="nav-label">Reference</div>
+      <a href="#method" data-p="method" title="Methodology and definitions"><svg class="ic" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5M8 7h7M8 11h7"/></svg><span>Methodology</span></a>
+    </nav>
+    <div class="side-foot"><button class="collapse" type="button" id="collapse" aria-label="Collapse menu"><svg class="ic" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg><span>Collapse</span></button></div>
+  </aside>
+
+  <main class="main">
+    <header class="hdr">
+      <div class="hdr-row">
+        <div class="title">
+          <div class="logo" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12h4l3-7 4 14 3-7h2"/></svg></div>
+          <div><h1>UPPCL AMISP Feeder Mapping Dashboard</h1>
+            <p>Feeder Bay Portal vs AMISP MDM feeder masters · division, substation, feeder, meter number and MF</p></div>
+        </div>
+        <div class="actions">
+          <button class="btn primary" type="button" id="csvTop"><svg class="ic" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Export CSV</button>
+          <button class="btn icon" type="button" id="theme" aria-label="Switch light or dark theme"><svg class="ic" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></button>
+        </div>
+      </div>
+      <div class="pills">
+        <span class="pill-s live"><i></i>Data as of <b id="asof">—</b></span>
+        <span class="pill-s">Feeder Bay Portal: <b id="pFbp">—</b></span>
+        <span class="pill-s">AMISP reports: <b id="pAmisp">—</b></span>
+        <span class="pill-s">Status sheet: <b id="pSheet">—</b></span>
+        <span class="pill-s scope">Scope: 4 Discoms, excl. KESCO</span>
+      </div>
+    </header>
+
+    <div class="filters" id="filters" role="group" aria-label="Filters for all sections">
+      <label class="fld" data-f="discom" for="fDiscom"><span>Discom</span><select id="fDiscom"></select></label>
+      <label class="fld" data-f="amisp" for="fAmisp"><span>AMISP</span><select id="fAmisp"></select></label>
+      <div class="fld" data-f="view"><span>Matching basis</span>
+        <span class="seg" id="fView"><button type="button" data-v="Direct" aria-pressed="true">Direct</button><button type="button" data-v="Manual" aria-pressed="false">Direct + manual</button></span>
+      </div>
+      <span class="grow"></span>
+      <button class="btn" type="button" id="reset"><svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>Reset</button>
+    </div>
+
+    <div class="view">
+      <!-- 1 Overview -->
+      <section class="page" id="p-overview" data-page="overview" aria-labelledby="h-overview">
+        <div class="page-head"><h2 id="h-overview">Overview</h2><p id="ovNote">—</p></div>
+        <div class="kpis" id="kpis"></div>
+        <div class="duo">
+          <div class="card">
+            <header><div><h3>Matching status by Discom and AMISP</h3><p class="note">Share of AMISP MDM feeders (excluding S/S, spare, incomer) in each status.</p></div></header>
+            <div class="legend" id="statusLegend"></div>
+            <div class="sbars" id="statusBars"></div>
+          </div>
+          <div class="card">
+            <header><div><h3>Where the remaining gap is</h3><p class="note">Feeders not fully matched, by reason. Bar length on one shared scale.</p></div></header>
+            <div class="sbars" id="gapBars"></div>
+            <div class="defs">
+              <div><b>MF mismatch</b>: everything agrees except the multiplying factor.</div>
+              <div><b>Meter mismatch</b>: feeder found, meter serial differs.</div>
+              <div><b>Division mismatch</b>: substation, feeder, meter and MF agree; division differs.</div>
+              <div><b>Not matched</b>: no full feeder match (substation mismatch or mapping not done).</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2 Status report -->
+      <section class="page" id="p-report" data-page="report" aria-labelledby="h-report" hidden>
+        <div class="page-head"><div><h2 id="h-report">Status report · sheet <span id="sumSheet">—</span></h2><p>The workbook's summary sheet with Discom totals and the UPPCL total. KESCO is carried as entered in the sheet.</p></div><button class="btn" type="button" id="csvReport"><svg class="ic" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Download CSV</button></div>
+        <div class="tscroll"><table id="reportTable"></table></div>
+      </section>
+
+      <!-- 3 Lookup & master -->
+      <section class="page" id="p-sources" data-page="sources" aria-labelledby="h-sources" hidden>
+        <div class="page-head"><h2 id="h-sources">Lookup method and AMISP master</h2><p>How portal feeders were found in the AMISP data, and what the AMISP reports contain.</p></div>
+        <div class="duo">
+          <div class="card">
+            <header><div><h3>How each portal feeder was found</h3><p class="note">All Feeder Bay Portal feeders. FBP Feeder = matched by feeder name; Meter No. = matched only by meter serial.</p></div></header>
+            <div class="legend" id="lookupLegend"></div>
+            <div class="sbars" id="lookupBars"></div>
+          </div>
+          <div class="card">
+            <header><div><h3>AMISP feeder master by TYPE</h3><p class="note">Meters in the AMISP reports. Only "Others" feeders enter the status report.</p></div></header>
+            <div class="legend" id="masterLegend"></div>
+            <div class="sbars" id="masterBars"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 Circles -->
+      <section class="page" id="p-circles" data-page="circles" aria-labelledby="h-circles" hidden>
+        <div class="page-head"><h2 id="h-circles">Circle-wise analysis</h2><p>Portal feeders of type Others, direct and manual matching combined. Click a heading to sort. <span id="circleCount"></span></p></div>
+        <div class="toolbar"><input type="search" id="circleSearch" placeholder="Search zone or circle" aria-label="Search circles"><button class="btn" type="button" id="csvCircles"><svg class="ic" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Download CSV</button></div>
+        <div class="tscroll"><table id="circleTable"></table></div>
+      </section>
+
+      <!-- 5 Exceptions -->
+      <section class="page" id="p-exceptions" data-page="exceptions" aria-labelledby="h-exceptions" hidden>
+        <div class="page-head"><h2 id="h-exceptions">Feeders needing correction</h2><p>Portal feeders (type Others) that do not fully match the AMISP master, with portal and AMISP values side by side.</p></div>
+        <div class="chips" id="excChips"></div>
+        <div class="toolbar"><input type="search" id="excSearch" placeholder="Search feeder, substation, division or meter no." aria-label="Search feeders"><span class="muted" id="excCount"></span><button class="btn" type="button" id="csv"><svg class="ic" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Download CSV</button></div>
+        <div class="tscroll"><table id="excTable"></table></div>
+        <button class="btn more" type="button" id="excMore" hidden>Show 100 more</button>
+      </section>
+
+      <!-- 6 Method -->
+      <section class="page" id="p-method" data-page="method" aria-labelledby="h-method" hidden>
+        <div class="page-head"><h2 id="h-method">Methodology and definitions</h2><p>How each figure is built from the comparison workbook.</p></div>
+        <div class="method">
+          <div class="card"><h3>Sources</h3><ul id="srcList"></ul></div>
+          <div class="card"><h3>Status report columns</h3><ul>
+            <li><b>2</b> Feeder Bay Portal feeders · <b>3</b> AMISP MDM meters</li>
+            <li><b>4 / 5</b> the same, excluding S/S, spare and incomer feeders (type Others)</li>
+            <li><b>6</b> = 8 + 10 + 11 feeders whose division, substation and feeder match · <b>7</b> = 6 ÷ 5</li>
+            <li><b>8</b> meter number and MF also match · <b>9</b> = 8 ÷ 5</li>
+            <li><b>12</b> division mismatch · <b>13</b> = 5 − 6 − 12</li></ul></div>
+          <div class="card"><h3>Direct vs manual matching</h3><ul>
+            <li><b>Direct</b>: portal and AMISP substation names agree as written.</li>
+            <li><b>Direct + manual</b>: also counts substations matched after removing 33/11 kV, S/S, dots, hyphens and spaces, or through the SS manual mapping sheet.</li></ul></div>
+          <div class="card"><h3>AMISP feeder master</h3><ul>
+            <li>Feeder name: the name if it contains "_", else the code if it contains "_", else the code when the name is blank, else the name. Polaris uses Omninet columns first.</li>
+            <li>TYPE: SPARE → Spare; INCOMER/INCOMING → Inc; names with "+" → Others; SUBSTATION / SUB STATION → SS; else Others.</li></ul></div>
+          <div class="card"><h3>Monthly update</h3><ol>
+            <li>Run <code>update_amisp_master.py</code> on the new AMISP reports folder.</li>
+            <li>Open the workbook, press Ctrl+Alt+F9, refresh Sheet1, update the status sheet, save.</li>
+            <li>Run <code>build_dashboard_data.py</code> to rebuild <code>data.js</code>, then push.</li></ol></div>
+        </div>
+      </section>
+    </div>
+    <div class="foot"><span id="foot1">—</span><span id="foot2">—</span></div>
+  </main>
+</div>
+<div class="tip" id="tip" role="tooltip"></div>
+
+<script src="data.js"></script>
+<script>
+(function(){
+"use strict";
+const D = window.DASH_DATA;
+const $ = (s, r=document) => r.querySelector(s);
+const fmt = n => (n==null||isNaN(n)) ? "—" : Math.round(n).toLocaleString("en-IN");
+const pct = (a,b) => b ? (a/b*100) : NaN;
+const fp = v => isNaN(v) ? "—" : v.toFixed(1)+"%";
+const esc = s => String(s==null?"":s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const ORDER = D.meta.order.map(([d,a]) => d+"|"+a);
+const DISCOM_FULL = {PVVNL:"Paschimanchal", DVVNL:"Dakshinanchal", MVVNL:"Madhyanchal", PuVVNL:"Purvanchal", KESCO:"KESCO"};
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const S = {discom:"", amisp:"", view:"Direct", circleSort:{k:"pct",dir:1}, excCat:"", excSearch:"", circleSearch:"", excLimit:100};
+const inSel = r => (!S.discom || r.discom===S.discom) && (!S.amisp || r.amisp===S.amisp);
+const store = {get(k){try{return localStorage.getItem(k)}catch(e){return null}}, set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+
+/* header + meta */
+$("#asof").textContent = D.meta.asof;
+$("#pFbp").textContent = D.meta.fbp_date;
+$("#pAmisp").textContent = D.meta.amisp_date;
+$("#pSheet").textContent = D.meta.summary_sheet;
+$("#sumSheet").textContent = D.meta.summary_sheet;
+$("#foot1").textContent = `Source: ${D.meta.workbook}`;
+$("#foot2").textContent = `Data as of ${D.meta.asof} · built ${D.meta.built} · ${fmt(D.counts.mapping_rows)} portal feeders · ${fmt(D.counts.master_rows)} AMISP meters`;
+$("#srcList").innerHTML = [
+  `<li><b>Workbook</b>: ${esc(D.meta.workbook)}</li>`,
+  `<li><b>Mapping</b>: ${fmt(D.counts.mapping_rows)} Feeder Bay Portal feeders (portal data ${esc(D.meta.fbp_date)}) matched against the AMISP master</li>`,
+  `<li><b>Sheet1</b>: pivot of directly matched Others feeders by status</li>`,
+  `<li><b>${esc(D.meta.summary_sheet)}</b>: status report, direct and manual tables</li>`,
+  `<li><b>AMISP feeder master</b>: ${fmt(D.counts.master_rows)} meters from the AMISP reports of ${esc(D.meta.amisp_date)}</li>`].join("");
+
+/* menu: pages, hash links, collapse */
+const app = $("#app");
+if (store.get("amisp-collapsed")==="1") app.classList.add("collapsed");
+$("#collapse").onclick = () => { app.classList.toggle("collapsed"); store.set("amisp-collapsed", app.classList.contains("collapsed")?"1":"0"); };
+const PAGES = ["overview","report","sources","circles","exceptions","method"];
+/* which filters change the figures on each page */
+const FILTERS = {overview:["discom","amisp","view"], report:["view"], sources:["discom","amisp"], circles:["discom","amisp"], exceptions:["discom","amisp"], method:[]};
+function show(p){
+  if (!PAGES.includes(p)) p = "overview";
+  document.querySelectorAll(".page").forEach(s => s.hidden = s.dataset.page!==p);
+  const need = FILTERS[p];
+  document.querySelectorAll("#filters [data-f]").forEach(f => f.hidden = !need.includes(f.dataset.f));
+  $("#filters").hidden = need.length===0;
+  scrollTo(0,0);
+  document.querySelectorAll("#nav a").forEach(a => { if (a.dataset.p===p) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current"); });
+}
+addEventListener("hashchange", () => show(location.hash.slice(1)));
+show(location.hash.slice(1));
+
+/* theme */
+const savedTheme = store.get("amisp-theme");
+if (savedTheme) document.documentElement.dataset.theme = savedTheme;
+$("#theme").onclick = () => { const t = document.documentElement.dataset.theme==="dark" ? "light" : "dark"; document.documentElement.dataset.theme = t; store.set("amisp-theme", t); render(); };
+
+/* filters */
+const discoms = [...new Set(D.meta.order.map(o=>o[0]))];
+const amisps = [...new Set(D.meta.order.map(o=>o[1]))];
+$("#fDiscom").innerHTML = `<option value="">All Discoms</option>` + discoms.map(d=>`<option value="${d}">${d} · ${DISCOM_FULL[d]}</option>`).join("");
+$("#fAmisp").innerHTML = `<option value="">All AMISPs</option>` + amisps.map(a=>`<option>${a}</option>`).join("");
+$("#fDiscom").onchange = e => {S.discom=e.target.value; render();};
+$("#fAmisp").onchange = e => {S.amisp=e.target.value; render();};
+document.querySelectorAll("#fView button").forEach(b => b.onclick = () => {S.view=b.dataset.v; document.querySelectorAll("#fView button").forEach(x=>x.setAttribute("aria-pressed", x===b)); render();});
+$("#reset").onclick = () => {S.discom="";S.amisp="";S.view="Direct";$("#fDiscom").value="";$("#fAmisp").value="";document.querySelectorAll("#fView button").forEach(x=>x.setAttribute("aria-pressed", x.dataset.v==="Direct"));render();};
+$("#csvTop").onclick = () => { const p = location.hash.slice(1); (p==="circles" ? csvCircles : p==="exceptions" ? csvExceptions : csvReport)(); };
+
+/* ---------- tooltip ---------- */
+const tip = $("#tip");
+function showTip(e, html){tip.innerHTML=html;tip.style.opacity=1;moveTip(e);}
+function moveTip(e){const w=tip.offsetWidth,h=tip.offsetHeight;let x=e.clientX+14,y=e.clientY+14;if(x+w>innerWidth-8)x=e.clientX-w-14;if(y+h>innerHeight-8)y=e.clientY-h-14;tip.style.left=x+"px";tip.style.top=y+"px";}
+function hideTip(){tip.style.opacity=0;}
+document.addEventListener("mousemove", e => {const t=e.target.closest("[data-tip]"); if(t) showTip(e, t.dataset.tip); else hideTip();});
+
+/* ---------- helpers ---------- */
+function rowsFor(section){ return D.summary.filter(r=>r.section===section && r.discom!=="KESCO"); }
+function sumRows(rs){ const k=["fbp_total","mdm_total","fbp_others","mdm_others","mtr_mf","mf_mm","mtr_mm","div_mm","matched","not_matched"]; const o={}; k.forEach(x=>o[x]=rs.reduce((s,r)=>s+(r[x]||0),0)); return o; }
+function sortOrder(a,b){ return ORDER.indexOf(a.discom+"|"+a.amisp)-ORDER.indexOf(b.discom+"|"+b.amisp); }
+function stackRow(label, sub, parts, total, extraCls=""){
+  const segs = parts.map(p => { const w = total? p.v/total*100 : 0; return w>0 ? `<span style="width:${w}%;background:${p.c}" data-tip="${esc(`<b>${label}${sub?" · "+sub:""}</b>${p.n}: ${fmt(p.v)} (${fp(w)})`)}"></span>` : ""; }).join("");
+  const lead = parts[0] ? pct(parts[0].v,total) : NaN;
+  return `<div class="srow ${extraCls}"><div class="lab"><b>${esc(label)}</b>${sub?`<small>${esc(sub)}</small>`:""}</div><div class="track" role="img" aria-label="${esc(label)}">${segs}</div><div class="pct" title="${esc(parts[0]?parts[0].n:"")}">${fp(lead)}</div></div>`;
+}
+function legend(el, items){ el.innerHTML = items.map(i=>`<span><i style="background:${i.c}"></i>${esc(i.n)}</span>`).join(""); }
+
+/* ---------- KPIs ---------- */
+function renderKpis(){
+  const rs = rowsFor(S.view).filter(inSel), t = sumRows(rs);
+  const direct = sumRows(rowsFor("Direct").filter(inSel)), manual = sumRows(rowsFor("Manual").filter(inSel));
+  const scope = (S.discom||S.amisp) ? [S.discom, S.amisp].filter(Boolean).join(" · ") : "All Discoms except KESCO";
+  $("#ovNote").textContent = `${scope} · ${S.view==="Direct"?"direct matching":"direct + manual matching"} · as of ${D.meta.asof}`;
+  const k = [
+    {k:"Portal feeders (FBP)", v:fmt(t.fbp_total), s:`${fmt(t.fbp_others)} excl. S/S, spare, incomer`, kc:"--brand-2"},
+    {k:"AMISP MDM meters", v:fmt(t.mdm_total), s:`${fmt(t.mdm_others)} feeders of type Others`, kc:"--c4"},
+    {k:"Meter No & MF matched", v:fp(pct(t.mtr_mf,t.mdm_others)), s:`${fmt(t.mtr_mf)} of ${fmt(t.mdm_others)} feeders`, kc:"--ok", vc:"--ok", bar:pct(t.mtr_mf,t.mdm_others)},
+    {k:"Feeder matched", v:fp(pct(t.matched,t.mdm_others)), s:`${fmt(t.matched)} · any meter state`, kc:"--c5"},
+    {k:"Added by manual mapping", v:"+"+fmt(manual.mtr_mf-direct.mtr_mf), s:`meter & MF matches beyond direct`, kc:"--warn"},
+    {k:"Not matched", v:fmt(t.not_matched), s:`${fp(pct(t.not_matched,t.mdm_others))} of AMISP feeders`, kc:"--bad", vc:"--bad"},
+  ];
+  $("#kpis").innerHTML = k.map(x=>`<div class="kpi" style="--kc:var(${x.kc});${x.vc?`--vc:var(${x.vc})`:""}"><div class="k">${esc(x.k)}</div><div class="v num">${esc(x.v)}</div><div class="s">${esc(x.s)}</div>${x.bar!=null?`<div class="meter"><b style="width:${Math.min(100,x.bar)}%"></b></div>`:""}</div>`).join("");
+}
+
+/* ---------- status bars ---------- */
+function statusParts(r){
+  return [
+    {n:"Meter No & MF matched", v:r.mtr_mf, c:css("--c1")},
+    {n:"MF mismatch", v:r.mf_mm, c:css("--c2")},
+    {n:"Meter No mismatch", v:r.mtr_mm, c:css("--c3")},
+    {n:"Division mismatch", v:r.div_mm, c:css("--c4")},
+    {n:"Not matched", v:Math.max(0,r.not_matched), c:css("--c6")},
+  ];
+}
+function renderStatus(){
+  const rs = rowsFor(S.view).filter(inSel).sort(sortOrder);
+  legend($("#statusLegend"), statusParts(rs[0]||{}));
+  let h = rs.map(r => stackRow(`${r.discom} · ${r.amisp}`, `${fmt(r.mdm_others)} AMISP feeders`, statusParts(r), r.mdm_others)).join("");
+  if (rs.length>1){ const t=sumRows(rs); h += stackRow("Total", `${fmt(t.mdm_others)} AMISP feeders`, statusParts(t), t.mdm_others, "total"); }
+  $("#statusBars").innerHTML = h || `<p class="muted">No rows for this filter.</p>`;
+
+  const gp = r => [
+    {n:"MF mismatch", v:r.mf_mm, c:css("--c2")},
+    {n:"Meter No mismatch", v:r.mtr_mm, c:css("--c3")},
+    {n:"Division mismatch", v:r.div_mm, c:css("--c4")},
+    {n:"Not matched", v:Math.max(0,r.not_matched), c:css("--c6")},
+  ];
+  const max = Math.max(1, ...rs.map(r=>gp(r).reduce((s,p)=>s+p.v,0)));
+  $("#gapBars").innerHTML = rs.map(r => {
+    const parts = gp(r), tot = parts.reduce((s,p)=>s+p.v,0);
+    const segs = parts.map(p=> p.v>0?`<span style="width:${p.v/max*100}%;background:${p.c}" data-tip="${esc(`<b>${r.discom} · ${r.amisp}</b>${p.n}: ${fmt(p.v)}`)}"></span>`:"").join("");
+    return `<div class="srow"><div class="lab"><b>${r.discom} · ${r.amisp}</b></div><div class="track" style="background:transparent">${segs}</div><div class="pct">${fmt(tot)}</div></div>`;
+  }).join("");
+}
+
+/* ---------- report table ---------- */
+function renderReport(){
+  const rs = D.summary.filter(r=>r.section===S.view);
+  const cols = [
+    ["fbp_total","Total feeders · Feeder Bay Portal","2"],["mdm_total","Total feeders · AMISP MDM","3"],
+    ["fbp_others","Excl. S/S, spare, incomer · FBP","4"],["mdm_others","Excl. S/S, spare, incomer · AMISP MDM","5"],
+    ["matched","Div, S/s & feeder matched","6=8+10+11"],["matched%","In %","7=6/5"],
+    ["mtr_mf","Meter No & MF match","8"],["mtr_mf%","In %","9=8/5"],
+    ["mf_mm","Meter No match, MF mismatch","10"],["mtr_mm","Meter No mismatch","11"],
+    ["div_mm","Division mismatch","12"],["not_matched", S.view==="Direct"?"S/s or feeder mismatched":"Mapping not done","13"]];
+  const cell = (r,k) => k.endsWith("%") ? `<td class="n pct">${fp(pct(r[k.slice(0,-1)], r.mdm_others))}</td>` : `<td class="n">${fmt(r[k])}</td>`;
+  let body = "";
+  const out = [];
+  const csvVals = r => cols.map(c => c[0].endsWith("%") ? (r.mdm_others ? +(r[c[0].slice(0,-1)]/r.mdm_others*100).toFixed(1) : "") : r[c[0]]);
+  const groups = [...new Set(rs.map(r=>r.discom))];
+  const all = [];
+  groups.forEach(g => {
+    const gr = rs.filter(r=>r.discom===g).sort(sortOrder);
+    gr.forEach(r => { all.push(r); out.push([r.discom, r.amisp, ...csvVals(r)]); body += `<tr><td>${esc(r.discom)}</td><td>${esc(r.amisp)}</td>${cols.map(c=>cell(r,c[0])).join("")}</tr>`; });
+    if (gr.length>1 || g!=="KESCO"){ const t=sumRows(gr); out.push([g+" total", "", ...csvVals(t)]); body += `<tr class="sub"><td colspan="2">${esc(g)} total</td>${cols.map(c=>cell(t,c[0])).join("")}</tr>`; }
+  });
+  const T = sumRows(all);
+  out.push(["UPPCL total", "", ...csvVals(T)]);
+  S.reportCsv = {hdr:["Discom","AMISP", ...cols.map(c=>`(${c[2]}) ${c[1]}`)], rows: out};
+  body += `<tr class="grand"><td colspan="2">UPPCL total</td>${cols.map(c=>cell(T,c[0])).join("")}</tr>`;
+  $("#reportTable").innerHTML = `<thead><tr><th>Discom</th><th>AMISP</th>${cols.map(c=>`<th class="n">${esc(c[1])}<span class="colnum">${esc(c[2])}</span></th>`).join("")}</tr></thead><tbody>${body}</tbody>`;
+}
+
+/* ---------- lookup + master ---------- */
+function renderLookup(){
+  const cats = [["FBP Feeder",css("--c5")],["Meter No.",css("--c2")],["Not Found",css("--c6")]];
+  legend($("#lookupLegend"), cats.map(([n,c])=>({n,c})));
+  const keys = D.meta.order.filter(([d,a])=>inSel({discom:d,amisp:a}));
+  $("#lookupBars").innerHTML = keys.map(([d,a]) => {
+    const rs = D.lookup.filter(r=>r.discom===d&&r.amisp===a), tot = rs.reduce((s,r)=>s+r.n,0);
+    const parts = cats.map(([n,c])=>({n, c, v:(rs.find(r=>r.lookup===n)||{n:0}).n}));
+    return stackRow(`${d} · ${a}`, `${fmt(tot)} portal feeders`, parts, tot);
+  }).join("");
+
+  const tcol = {Others:css("--c5"), SS:css("--c4"), Inc:css("--c2"), Spare:css("--c6")};
+  const types = ["Others","SS","Inc","Spare"];
+  legend($("#masterLegend"), types.map(n=>({n:n==="SS"?"Substation (SS)":n==="Inc"?"Incomer":n, c:tcol[n]})));
+  $("#masterBars").innerHTML = keys.map(([d,a]) => {
+    const rs = D.master.filter(r=>r.discom===d&&r.amisp===a), tot = rs.reduce((s,r)=>s+r.n,0);
+    const parts = types.map(t=>({n:t, c:tcol[t], v:(rs.find(r=>r.type===t)||{n:0}).n}));
+    return stackRow(`${d} · ${a}`, `${fmt(tot)} meters`, parts, tot);
+  }).join("");
+}
+
+/* ---------- circle table ---------- */
+const CC = [
+  {k:"discom",t:"Discom"},{k:"amisp",t:"AMISP"},{k:"zone",t:"Zone"},{k:"circle",t:"Circle"},
+  {k:"feeders",t:"Feeders",n:1},{k:"Meter No & MF Matched",t:"Meter & MF matched",n:1},{k:"pct",t:"Match %",n:1},
+  {k:"Meter No Matched, MF Mismatched",t:"MF mismatch",n:1},{k:"Meter No Mismatched",t:"Meter mismatch",n:1},
+  {k:"Division mismatch",t:"Div mismatch",n:1},{k:"Subtation mismatch",t:"S/S mismatch",n:1},{k:"Mapping not done",t:"Mapping not done",n:1}];
+function renderCircles(){
+  const q = S.circleSearch.toLowerCase();
+  let rs = D.circles.filter(inSel).map(r=>({...r, pct:pct(r["Meter No & MF Matched"], r.feeders)}))
+    .filter(r=>!q || (r.zone+" "+r.circle).toLowerCase().includes(q));
+  const {k,dir} = S.circleSort, c = CC.find(x=>x.k===k);
+  rs.sort((a,b)=> c.n ? (a[k]-b[k])*dir : String(a[k]).localeCompare(String(b[k]))*dir);
+  $("#circleCount").textContent = `· ${rs.length} circles`;
+  S.circleCsv = rs;
+  const head = `<thead><tr>${CC.map(x=>`<th class="${x.n?"n":""}" aria-sort="${x.k===k?(dir>0?"ascending":"descending"):"none"}"><button type="button" data-k="${esc(x.k)}">${esc(x.t)}</button></th>`).join("")}</tr></thead>`;
+  const body = rs.map(r => {
+    const p = r.pct, col = p>=95?"--ok":p>=85?"--warn":"--bad";
+    return `<tr>${CC.map(x=>{
+      if (x.k==="pct") return `<td class="n"><div class="inbar"><span class="mono">${fp(p)}</span><span class="b"><i style="width:${p||0}%;background:var(${col})"></i></span></div></td>`;
+      return x.n ? `<td class="n">${fmt(r[x.k])}</td>` : `<td class="${x.k==='discom'||x.k==='amisp'?'nw':''}">${esc(r[x.k])}</td>`;
+    }).join("")}</tr>`;
+  }).join("");
+  const cg = `<colgroup>${[7,7,10,13,7,8,12,7,7,7,8,7].map(w=>`<col style="width:${w}%">`).join("")}</colgroup>`;
+  $("#circleTable").innerHTML = cg + head + `<tbody>${body || `<tr><td colspan="${CC.length}" class="muted">No circles match.</td></tr>`}</tbody>`;
+  $("#circleTable").querySelectorAll("th button").forEach(b => b.onclick = () => { const kk=b.dataset.k; S.circleSort = {k:kk, dir: S.circleSort.k===kk ? -S.circleSort.dir : (CC.find(x=>x.k===kk).n? -1:1)}; renderCircles(); });
+}
+$("#circleSearch").oninput = e => {S.circleSearch=e.target.value; renderCircles();};
+
+/* ---------- exceptions ---------- */
+const EC = D.exceptions.cols, ER = D.exceptions.rows.map(r=>Object.fromEntries(EC.map((c,i)=>[c,r[i]])));
+const EXC_CATS = [["Mapping not done","--c6"],["Subtation mismatch","--c3"],["Meter No Mismatched","--c3"],["Meter No Matched, MF Mismatched","--c2"],["Division mismatch","--c4"]];
+const remarkPill = r => { const c = r==="Meter No Matched, MF Mismatched"||r==="Division mismatch" ? "p-warn" : "p-bad"; return `<span class="pill ${c}">${esc(r)}</span>`; };
+function excFiltered(){
+  const q = S.excSearch.toLowerCase();
+  return ER.filter(r => inSel(r) && (!S.excCat || r.remark===S.excCat) &&
+    (!q || [r.feeder,r.substation,r.division,r.circle,r.zone,r.meter,r.a_meter,r.a_feeder].join(" ").toLowerCase().includes(q)));
+}
+function renderExceptions(){
+  const base = ER.filter(inSel);
+  $("#navCnt").textContent = fmt(base.length);
+  $("#excChips").innerHTML = `<button type="button" class="chip" data-c="" aria-pressed="${!S.excCat}">All <b>${fmt(base.length)}</b></button>` +
+    EXC_CATS.map(([c,v])=>`<button type="button" class="chip" data-c="${esc(c)}" aria-pressed="${S.excCat===c}"><i style="background:var(${v})"></i>${esc(c)} <b>${fmt(base.filter(r=>r.remark===c).length)}</b></button>`).join("");
+  $("#excChips").querySelectorAll(".chip").forEach(b=>b.onclick=()=>{S.excCat=b.dataset.c; S.excLimit=100; renderExceptions();});
+  const rs = excFiltered(), LIM = S.excLimit;
+  $("#excCount").textContent = rs.length>LIM ? `Showing ${fmt(LIM)} of ${fmt(rs.length)} feeders` : `${fmt(rs.length)} feeders`;
+  const head = `<thead><tr><th>Discom</th><th>Circle / Division</th><th>Substation</th><th>Portal feeder</th><th>Portal meter · MF</th><th>AMISP feeder</th><th>AMISP meter · MF</th><th>Status</th><th>Found by</th></tr></thead>`;
+  const body = rs.slice(0,LIM).map(r=>{
+    const mm = r.meter && r.a_meter && r.meter.toUpperCase()!==r.a_meter.toUpperCase();
+    return `<tr><td class="nw">${esc(r.discom)}<br><span class="muted">${esc(r.amisp)}</span></td><td>${esc(r.circle)}<br><span class="muted">${esc(r.division)}</span></td><td>${esc(r.substation)}${r.a_ss&&r.a_ss!==r.substation?`<br><span class="muted">AMISP: ${esc(r.a_ss)}</span>`:""}</td><td>${esc(r.feeder)}</td><td class="mono">${esc(r.meter)} · ${esc(r.mf)}</td><td>${esc(r.a_feeder)||'<span class="muted">—</span>'}</td><td class="mono" style="${mm?"color:var(--bad)":""}">${esc(r.a_meter)||"—"} · ${esc(r.a_mf)||"—"}</td><td>${remarkPill(r.remark)}</td><td class="muted">${esc(r.lookup)}</td></tr>`;
+  }).join("");
+  const cg = `<colgroup>${[7,13,12,16,10,15,10,11,6].map(w=>`<col style="width:${w}%">`).join("")}</colgroup>`;
+  $("#excTable").innerHTML = cg + head + `<tbody>${body || `<tr><td colspan="9" class="muted">No feeders match.</td></tr>`}</tbody>`;
+  $("#excMore").hidden = rs.length <= LIM;
+}
+$("#excSearch").oninput = e => {S.excSearch=e.target.value; S.excLimit=100; renderExceptions();};
+$("#excMore").onclick = () => {S.excLimit += 100; renderExceptions();};
+/* ---------- CSV downloads (what the table shows, with current filters, search and sort) ---------- */
+function saveCsv(name, hdr, rows){
+  const q = v => typeof v==="number" ? String(v) : `"${String(v==null?"":v).replace(/"/g,'""')}"`;
+  const scope = [S.discom, S.amisp].filter(Boolean).join("_");
+  const csv = "\ufeff" + [hdr.map(q).join(","), ...rows.map(r=>r.map(q).join(","))].join("\r\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));
+  a.download = `${name}${scope?"_"+scope:""}_${D.meta.asof}.csv`;
+  document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();}, 500);
+}
+function csvExceptions(){
+  const hdr = ["Discom","AMISP","Zone","Circle","Division","Substation","Portal feeder","Portal meter","Portal MF","AMISP feeder","AMISP meter","AMISP MF","AMISP division","AMISP substation","Status","Matching","Found by"];
+  saveCsv("AMISP_feeders_needing_correction", hdr, excFiltered().map(r=>EC.map(c=>r[c])));
+}
+function csvReport(){
+  const R = S.reportCsv;
+  saveCsv(`AMISP_status_report_${S.view==="Direct"?"direct":"direct_manual"}`, R.hdr, R.rows);
+}
+function csvCircles(){
+  const hdr = CC.map(x=>x.k==="pct"?"Match % (Meter & MF matched / feeders)":x.t);
+  saveCsv("AMISP_circle_wise", hdr, S.circleCsv.map(r=>CC.map(x=> x.k==="pct" ? (isNaN(r.pct)?"":+r.pct.toFixed(1)) : r[x.k])));
+}
+$("#csv").onclick = csvExceptions;
+$("#csvReport").onclick = csvReport;
+$("#csvCircles").onclick = csvCircles;
+
+/* ---------- render ---------- */
+function render(){ renderKpis(); renderStatus(); renderReport(); renderLookup(); renderCircles(); renderExceptions(); }
+render();
+})();
+</script>
+</body>
+</html>
