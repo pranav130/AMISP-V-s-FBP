@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>⚡ AMISP Feeder Mapping · UPPCL</title>
+<title>⚡ AMISP/FBP Feeder Mapping · UPPCL</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230d4c92'/%3E%3Cpath d='M17 6 8 18h7l-1 8 9-12h-7z' fill='%23ffffff' stroke='%23ffffff' stroke-width='0.8' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
@@ -34,12 +34,6 @@
   --crit-bg: #f9e0de;
   --na-bg: #eef1f5;
   --na: #7a8494;
-  --c1: #1f8a5b;
-  --c2: #e0a42b;
-  --c3: #d9622b;
-  --c4: #7b5cc4;
-  --c5: #2a78d6;
-  --c6: #a8b3c4;
   --font: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
 }
@@ -65,12 +59,6 @@
   --crit-bg: #3b1a18;
   --na-bg: #222833;
   --na: #8791a0;
-  --c1: #4cc38a;
-  --c2: #f0b549;
-  --c3: #f08a52;
-  --c4: #a58cf0;
-  --c5: #5aa9dc;
-  --c6: #5c6a80;
   color-scheme: dark;
 }
 
@@ -95,12 +83,6 @@
   --crit-bg: #351115;
   --na-bg: #142036;
   --na: #627694;
-  --c1: #34d399;
-  --c2: #fbbf24;
-  --c3: #fb923c;
-  --c4: #a78bfa;
-  --c5: #38bdf8;
-  --c6: #475569;
   color-scheme: dark;
 }
 
@@ -113,7 +95,6 @@ body {
   line-height: 1.45;
   -webkit-font-smoothing: antialiased;
 }
-.num, td.n, td.pct { font-variant-numeric: tabular-nums; }
 
 /* ── App Layout & Sidebar Navigation ── */
 .app-layout {
@@ -167,21 +148,9 @@ body {
   box-shadow: 0 2px 8px rgba(90, 169, 220, 0.3);
 }
 
-.sidebar-brand-text {
-  overflow: hidden;
-  white-space: nowrap;
-}
-.sidebar-title {
-  font-weight: 700;
-  font-size: 13.5px;
-  color: var(--ink);
-  line-height: 1.2;
-}
-.sidebar-sub {
-  font-size: 11px;
-  color: var(--ink-3);
-  margin-top: 2px;
-}
+.sidebar-brand-text { overflow: hidden; white-space: nowrap; }
+.sidebar-title { font-weight: 700; font-size: 13.5px; color: var(--ink); line-height: 1.2; }
+.sidebar-sub { font-size: 11px; color: var(--ink-3); margin-top: 2px; }
 
 .sidebar-nav {
   padding: 12px 8px;
@@ -212,10 +181,7 @@ body {
   white-space: nowrap;
   position: relative;
 }
-.nav-item:hover {
-  background: var(--surface-2);
-  color: var(--ink);
-}
+.nav-item:hover { background: var(--surface-2); color: var(--ink); }
 .nav-item.active {
   background: var(--accent-soft);
   color: var(--accent);
@@ -239,11 +205,7 @@ body {
   width: 22px;
   flex-shrink: 0;
 }
-.nav-label {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  flex: 1;
-}
+.nav-label { overflow: hidden; text-overflow: ellipsis; flex: 1; }
 .nav-cnt {
   font-family: var(--mono);
   font-size: 10.5px;
@@ -255,11 +217,7 @@ body {
   flex-shrink: 0;
 }
 
-.sidebar-footer {
-  padding: 10px 8px;
-  border-top: 1px solid var(--line);
-  margin-top: auto;
-}
+.sidebar-footer { padding: 10px 8px; border-top: 1px solid var(--line); margin-top: auto; }
 .sidebar-toggle-btn {
   display: flex;
   align-items: center;
@@ -277,15 +235,8 @@ body {
   transition: all 0.15s ease;
   white-space: nowrap;
 }
-.sidebar-toggle-btn:hover {
-  background: var(--surface-2);
-  color: var(--ink);
-}
-.toggle-icon {
-  font-size: 10px;
-  width: 16px;
-  text-align: center;
-}
+.sidebar-toggle-btn:hover { background: var(--surface-2); color: var(--ink); }
+.toggle-icon { font-size: 10px; width: 16px; text-align: center; }
 
 .app-sidebar.collapsed { width: 68px; }
 .app-sidebar.collapsed .sidebar-brand-text,
@@ -309,7 +260,7 @@ body {
   max-width: 1540px;
   margin: 0 auto;
   padding-inline: 20px;
-  padding-block: 16px 40px;
+  padding-block: 16px 44px;
   display: grid;
   gap: 16px;
 }
@@ -331,17 +282,8 @@ h1 {
   align-items: center;
   gap: 8px;
 }
-.sub {
-  color: var(--ink-2);
-  margin: 3px 0 0;
-  font-size: 13px;
-}
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
+.sub { color: var(--ink-2); margin: 3px 0 0; font-size: 13px; }
+.header-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .db-badge {
   font-family: var(--mono);
   font-size: 11.5px;
@@ -372,11 +314,7 @@ h1 {
   transition: all 0.15s ease;
 }
 .btn:hover { border-color: var(--accent); color: var(--accent); }
-.btn-primary {
-  background: var(--accent);
-  color: #fff;
-  border-color: var(--accent);
-}
+.btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
 .btn-primary:hover { opacity: 0.9; color: #fff; }
 .btn-theme { padding: 5px 9px; font-size: 14px; }
 .btn-hamburger { display: none; font-size: 14px; padding: 5px 9px; }
@@ -394,12 +332,7 @@ h1 {
   padding: 8px 14px;
   font-size: 12.5px;
 }
-.status-tags {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 12px;
-}
+.status-tags { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
 .tag-badge {
   font-family: var(--mono);
   font-size: 11px;
@@ -413,38 +346,12 @@ h1 {
   gap: 4px;
 }
 .tag-badge b { color: var(--ink); font-weight: 600; }
-.tag-badge.ptw-off {
-  background: #fff3e0;
-  border-color: #ffb74d;
-  color: #e65100;
-  font-weight: 600;
-}
-[data-theme="dark"] .tag-badge.ptw-off {
-  background: #3e2723;
-  border-color: #ff9800;
-  color: #ffb74d;
-}
-[data-theme="midnight"] .tag-badge.ptw-off {
-  background: #2b180d;
-  border-color: #ea580c;
-  color: #fdba74;
-}
-.tag-badge.ptw-on {
-  background: #e8f5e9;
-  border-color: #81c784;
-  color: #2e7d32;
-  font-weight: 600;
-}
-[data-theme="dark"] .tag-badge.ptw-on {
-  background: #1b5e20;
-  border-color: #4caf50;
-  color: #a5d6a7;
-}
-[data-theme="midnight"] .tag-badge.ptw-on {
-  background: #08281d;
-  border-color: #059669;
-  color: #6ee7b7;
-}
+.tag-badge.ptw-off { background: #fff3e0; border-color: #ffb74d; color: #e65100; font-weight: 600; }
+[data-theme="dark"] .tag-badge.ptw-off { background: #3e2723; border-color: #ff9800; color: #ffb74d; }
+[data-theme="midnight"] .tag-badge.ptw-off { background: #2b180d; border-color: #ea580c; color: #fdba74; }
+.tag-badge.ptw-on { background: #e8f5e9; border-color: #81c784; color: #2e7d32; font-weight: 600; }
+[data-theme="dark"] .tag-badge.ptw-on { background: #1b5e20; border-color: #4caf50; color: #a5d6a7; }
+[data-theme="midnight"] .tag-badge.ptw-on { background: #08281d; border-color: #059669; color: #6ee7b7; }
 
 /* ── Sticky Filter Bar ── */
 .filters-container {
@@ -460,17 +367,8 @@ h1 {
   gap: 10px;
 }
 .filters-container[hidden], .f[hidden] { display: none !important; }
-.filters-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 14px;
-  align-items: flex-end;
-}
-.f {
-  display: grid;
-  gap: 3px;
-  min-width: 0;
-}
+.filters-grid { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: flex-end; }
+.f { display: grid; gap: 3px; min-width: 0; }
 .f label, .f .lab {
   font-size: 11px;
   text-transform: uppercase;
@@ -486,11 +384,28 @@ select, input[type=search] {
   border: 1px solid var(--line-2);
   border-radius: 6px;
   padding: 5px 8px;
-  min-width: 170px;
+  min-width: 145px;
 }
 select:focus-visible, input:focus-visible, button:focus-visible, a:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 1px;
+}
+.leave-out-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--line);
+  font-size: 12px;
+}
+.leave-out-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+  font-weight: 700;
+  white-space: nowrap;
 }
 .seg {
   display: inline-flex;
@@ -503,48 +418,37 @@ select:focus-visible, input:focus-visible, button:focus-visible, a:focus-visible
   border: 0;
   border-radius: 0;
   background: transparent;
-  padding: 5px 12px;
-  font-size: 12.5px;
+  padding: 4px 10px;
+  font-size: 12px;
   color: var(--ink-2);
   cursor: pointer;
   font-family: var(--font);
-  font-weight: 500;
-  transition: all 0.12s ease;
 }
 .seg button + button { border-left: 1px solid var(--line-2); }
 .seg button[aria-pressed="true"] {
   background: var(--accent-soft);
-  color: var(--accent);
+  color: var(--ink);
   font-weight: 600;
 }
 
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  align-items: center;
-  font-size: 12px;
-  color: var(--ink-2);
-}
+.chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 12px; color: var(--ink-2); }
 .chips[hidden] { display: none !important; }
 .chip {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   background: var(--accent-soft);
   color: var(--ink);
   border: 1px solid transparent;
   border-radius: 999px;
-  padding: 3px 10px;
+  padding: 2px 6px 2px 10px;
   font-size: 12px;
   font-weight: 500;
-  cursor: pointer;
   font-family: var(--font);
 }
 .chip i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
 .chip b { font-family: var(--mono); font-weight: 600; }
-.chip.filter-chip { background: var(--accent-soft); padding: 2px 6px 2px 10px; cursor: default; }
-.chip.filter-chip button {
+.chip button {
   border: 0;
   background: transparent;
   padding: 0 4px;
@@ -557,17 +461,14 @@ select:focus-visible, input:focus-visible, button:focus-visible, a:focus-visible
   background: var(--surface);
   border-color: var(--line-2);
   color: var(--ink-2);
+  padding: 4px 11px;
+  cursor: pointer;
 }
 .chip.cat-chip:hover { border-color: var(--accent); color: var(--ink); }
-.chip.cat-chip[aria-pressed="true"] {
-  background: var(--accent-soft);
-  border-color: var(--accent);
-  color: var(--accent);
-  font-weight: 600;
-}
+.chip.cat-chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 600; }
 
 /* ── Pages & Panels ── */
-.page { display: grid; gap: 16px; animation: tabFadeIn 0.16s ease-in-out; }
+.page { display: grid; gap: 16px; animation: tabFadeIn 0.18s ease-in-out; }
 .page[hidden] { display: none !important; }
 @keyframes tabFadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -586,6 +487,8 @@ select:focus-visible, input:focus-visible, button:focus-visible, a:focus-visible
   flex-wrap: wrap;
   margin-bottom: 10px;
 }
+.ph > div { flex: 1 1 220px; min-width: 0; }
+.ph > .pill, .ph > .btn { flex-shrink: 0; }
 h2 { font-size: 14.5px; font-weight: 600; margin: 0; }
 .hint { color: var(--ink-3); font-size: 12px; margin: 2px 0 0; }
 
@@ -595,7 +498,7 @@ h2 { font-size: 14.5px; font-weight: 600; margin: 0; }
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 10px;
 }
-@media (max-width: 1250px) { .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 1100px) { .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 640px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 .kpi {
@@ -633,101 +536,49 @@ h2 { font-size: 14.5px; font-weight: 600; margin: 0; }
   color: var(--kpi-val-col, var(--ink));
 }
 .kpi .u { font-size: 11px; color: var(--ink-3); }
-.meter { height: 4px; border-radius: 3px; background: var(--surface-2); overflow: hidden; margin-top: 5px; }
-.meter b { display: block; height: 100%; background: var(--good); }
-
 .kpi-footer-strip {
   font-size: 12px;
   color: var(--ink-2);
   display: flex;
-  gap: 10px 18px;
+  gap: 14px;
   flex-wrap: wrap;
   padding-inline: 4px;
-  align-items: center;
+  margin-top: 8px;
 }
 .kpi-footer-strip span b { font-family: var(--mono); font-weight: 600; color: var(--ink); }
 
-/* ── Grid2 & Stacked Bars ── */
+/* ── Pills & Charts Grid ── */
+.pill {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 1px 8px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.p-good { background: var(--good-bg); color: var(--good); }
+.p-warn { background: var(--warn-bg); color: var(--warn); }
+.p-serious { background: var(--serious-bg); color: var(--serious); }
+.p-crit { background: var(--crit-bg); color: var(--crit); }
+.p-na { background: var(--na-bg); color: var(--na); }
+
 .grid2 {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 480px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr));
   gap: 16px;
 }
-.legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 14px;
-  font-size: 12px;
-  color: var(--ink-2);
-  margin-bottom: 10px;
+.chart-box {
+  position: relative;
+  height: 230px;
+  width: 100%;
 }
-.legend span { display: inline-flex; align-items: center; gap: 6px; }
-.legend i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
 
-.sbars { display: grid; gap: 6px; align-content: start; }
-.srow {
-  display: grid;
-  grid-template-columns: minmax(120px, 155px) 1fr minmax(50px, 60px);
-  gap: 10px;
-  align-items: center;
-  padding: 4px 6px;
-  border-radius: 6px;
-  transition: background 0.15s ease;
-}
-.srow.clickable { cursor: pointer; }
-.srow.clickable:hover { background: var(--surface-2); }
-.srow.active-row { background: var(--accent-soft); }
-.srow .lab { font-size: 12.5px; line-height: 1.25; }
-.srow .lab b { font-weight: 600; color: var(--ink); }
-.srow .lab small { display: block; color: var(--ink-3); font-size: 11px; }
-.track {
-  display: flex;
-  height: 18px;
-  border-radius: 4px;
-  overflow: hidden;
-  background: var(--surface-2);
-}
-.track span { height: 100%; min-width: 0; transition: opacity 0.15s; }
-.track:hover span { opacity: 0.55; }
-.track span:hover { opacity: 1; }
-.srow .pct {
-  font-family: var(--mono);
-  font-size: 12.5px;
-  font-weight: 600;
-  text-align: right;
-  color: var(--ink);
-}
-.srow.total { border-top: 1px solid var(--line); padding-top: 8px; margin-top: 2px; }
-.defs {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px 18px;
-  font-size: 12px;
-  color: var(--ink-2);
-  border-top: 1px dashed var(--line);
-  padding-top: 10px;
-  margin-top: 12px;
-}
-.defs b { color: var(--ink); }
-
-/* ── Tables ── */
-.toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
-  margin-bottom: 10px;
-}
-.toolbar input { flex: 1 1 260px; }
+/* ── Tables (League Table + Status Report + Circles + Exceptions) ── */
 .tw { overflow-x: auto; min-width: 0; }
-.scroll { max-height: 540px; overflow: auto; border: 1px solid var(--line); border-radius: 8px; }
+.scroll { max-height: 520px; overflow: auto; }
 table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
-th, td {
-  padding: 7px 10px;
-  text-align: left;
-  white-space: normal;
-  border-bottom: 1px solid var(--line);
-}
+th, td { padding: 7px 10px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--line); }
 th {
   font-size: 11px;
   text-transform: uppercase;
@@ -737,62 +588,50 @@ th {
   position: sticky;
   top: 0;
   background: var(--surface);
-  z-index: 2;
-  vertical-align: bottom;
-}
-th.n, td.n { text-align: right; }
-td.n, td.pct, td.nw, td .inbar { white-space: nowrap; }
-td.n, td.pct, .mono { font-family: var(--mono); font-size: 12px; }
-th button {
-  all: unset;
   cursor: pointer;
-  display: inline-flex;
-  gap: 4px;
-  align-items: center;
+  user-select: none;
+  z-index: 2;
 }
+th.nosort { cursor: default; }
+th:hover:not(.nosort) { color: var(--ink); }
+th .sort-ico { display: inline-block; margin-left: 3px; opacity: 0.4; font-size: 10px; }
+th.sorted { color: var(--accent); }
+th.sorted .sort-ico { opacity: 1; color: var(--accent); }
+td { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12.5px; }
+td.tx, th.tx { text-align: left; font-family: var(--font); font-size: 13px; }
+th button { all: unset; cursor: pointer; display: inline-flex; gap: 4px; align-items: center; }
 th button::after { content: "↕"; opacity: 0.4; font-size: 10px; }
 th[aria-sort="ascending"] button::after { content: "▲"; opacity: 1; color: var(--accent); }
 th[aria-sort="descending"] button::after { content: "▼"; opacity: 1; color: var(--accent); }
 th[aria-sort="ascending"], th[aria-sort="descending"] { color: var(--accent); }
-tbody tr:hover td { background: var(--surface-2); }
-tr.sub td { font-weight: 600; border-top: 1.5px solid var(--line-2); background: var(--surface-2); }
-tr.grand td { font-weight: 700; border-top: 2px solid var(--accent); background: var(--accent-soft); color: var(--ink); }
 
-.pill {
-  display: inline-block;
-  border-radius: 999px;
-  padding: 1px 8px;
-  font-family: var(--mono);
-  font-size: 11.5px;
-  font-weight: 500;
-  white-space: nowrap;
-}
-.p-good { background: var(--good-bg); color: var(--good); }
-.p-warn { background: var(--warn-bg); color: var(--warn); }
-.p-crit { background: var(--crit-bg); color: var(--crit); }
-.p-na { background: var(--na-bg); color: var(--na); }
+tr.drill { cursor: pointer; }
+tr.drill:hover td, tbody tr:hover td { background: var(--surface-2); }
+tr.tot td, tr.sub td { font-weight: 600; border-top: 2px solid var(--line-2); background: var(--surface-2); }
+tr.grand td, tfoot tr.grand td { font-weight: 700; border-top: 2px solid var(--accent); background: var(--accent-soft); color: var(--ink); }
 
+.league-crumb { color: var(--accent); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; font-weight: 500; }
+.league-crumb:hover { color: var(--ink); }
+#tblLeague th, #tblLeague td { padding: 6px 6px; font-size: 12px; }
+#tblLeague th { font-size: 10.5px; letter-spacing: 0.03em; }
+#tblLeague tfoot tr.grand td { font-weight: 700; border-top: 2px solid var(--accent); background: var(--surface-2); }
+
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 10px; }
+.toolbar input { flex: 1 1 260px; }
+.colnum { display: block; color: var(--ink-3); font: 400 10px var(--mono); letter-spacing: 0; text-transform: none; }
+#reportTable td, #reportTable th { padding: 6px 8px; white-space: normal; }
+#reportTable th.n, #reportTable td.n { white-space: nowrap; }
+#excTable td, #circleTable td { white-space: normal; overflow-wrap: anywhere; vertical-align: top; }
+#excTable th, #circleTable th { white-space: normal; }
+#excTable, #circleTable { table-layout: fixed; }
 .inbar { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
 .inbar .b { width: 48px; height: 6px; background: var(--surface-2); border-radius: 3px; overflow: hidden; }
 .inbar .b i { display: block; height: 100%; }
-.colnum { display: block; color: var(--ink-3); font: 400 10px var(--mono); letter-spacing: 0; text-transform: none; }
-#reportTable td, #reportTable th { padding: 6px 8px; }
-#excTable td { vertical-align: top; }
-#circleTable th, #circleTable td { padding: 7px 8px; }
-#excTable, #circleTable { table-layout: fixed; }
-#excTable td, #circleTable td { overflow-wrap: anywhere; }
-#excTable td.mono, #excTable .pill, #excTable td.nw { white-space: normal; }
-
 .muted { color: var(--ink-3); font-size: 12px; }
-.more { justify-self: center; margin-top: 8px; }
+.more { justify-self: center; margin-top: 10px; }
 
 /* ── Method Grid ── */
-.method {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
-  gap: 14px;
-  align-content: start;
-}
+.method { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 14px; align-content: start; }
 .method .panel p, .method .panel li { color: var(--ink-2); font-size: 13px; margin: 0; }
 .method .panel ul, .method .panel ol { margin: 8px 0 0; padding-left: 18px; display: grid; gap: 6px; }
 .method code { font: 12px var(--mono); background: var(--surface-2); border-radius: 4px; padding: 1px 5px; color: var(--ink); }
@@ -820,44 +659,14 @@ tr.grand td { font-weight: 700; border-top: 2px solid var(--accent); background:
   padding: 22px 24px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.22);
 }
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 12px;
-  margin-bottom: 14px;
-}
+.modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); padding-bottom: 12px; margin-bottom: 14px; }
 .modal-header h3 { font-size: 16px; font-weight: 700; }
-.modal-close {
-  background: transparent;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  color: var(--ink-2);
-}
+.modal-close { background: transparent; border: none; font-size: 20px; cursor: pointer; color: var(--ink-2); }
 .modal-body { font-size: 13.5px; line-height: 1.6; color: var(--ink-2); }
 .modal-body h4 { font-size: 14px; color: var(--ink); margin: 14px 0 6px; }
 .modal-body ul, .modal-body ol { padding-left: 20px; margin-bottom: 10px; }
 .modal-body code { font-family: var(--mono); background: var(--surface-2); padding: 2px 5px; border-radius: 4px; font-size: 12px; }
 
-/* ── Tooltip & Footer ── */
-.tip {
-  position: fixed;
-  pointer-events: none;
-  background: var(--surface);
-  color: var(--ink);
-  border: 1px solid var(--line-2);
-  box-shadow: 0 8px 28px rgba(10,20,40,0.18);
-  border-radius: 8px;
-  padding: 8px 10px;
-  font-size: 12px;
-  z-index: 200;
-  max-width: 280px;
-  opacity: 0;
-  transition: opacity 0.1s;
-}
-.tip b { display: block; margin-bottom: 2px; }
 .foot {
   color: var(--ink-3);
   font-size: 11.5px;
@@ -865,25 +674,15 @@ tr.grand td { font-weight: 700; border-top: 2px solid var(--accent); background:
   flex-wrap: wrap;
   gap: 6px 16px;
   justify-content: space-between;
-  padding-top: 6px;
+  padding-top: 8px;
   border-top: 1px solid var(--line);
 }
 
 /* ── Mobile & Tablet Drawer ── */
-.sidebar-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.45);
-  z-index: 99;
-}
+.sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 99; }
 @media (max-width: 992px) {
   .btn-hamburger { display: inline-flex; }
-  .app-sidebar {
-    transform: translateX(-100%);
-    transition: transform 0.25s ease;
-    box-shadow: 2px 0 16px rgba(0,0,0,0.18);
-  }
+  .app-sidebar { transform: translateX(-100%); transition: transform 0.25s ease; box-shadow: 2px 0 16px rgba(0,0,0,0.18); }
   .app-sidebar.mobile-open { transform: translateX(0); }
   .sidebar-overlay.active { display: block; }
   .app-main { margin-left: 0 !important; }
@@ -893,8 +692,6 @@ tr.grand td { font-weight: 700; border-top: 2px solid var(--accent); background:
   .filters-container { position: static; }
   select, input[type=search] { min-width: 0; width: 100%; }
   .f { flex: 1 1 140px; }
-  .defs { grid-template-columns: 1fr; }
-  .srow { grid-template-columns: 100px 1fr 48px; }
   h1 { font-size: 17px; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
@@ -907,27 +704,27 @@ tr.grand td { font-weight: 700; border-top: 2px solid var(--accent); background:
     <div class="sidebar-brand">
       <div class="sidebar-brand-icon">⚡</div>
       <div class="sidebar-brand-text">
-        <div class="sidebar-title">AMISP/FBP Mapping</div>
-        <div class="sidebar-sub">UPPCL · Feeder Metering</div>
+        <div class="sidebar-title">UPPCL AMISP/FBP</div>
+        <div class="sidebar-sub">Feeder Mapping · FY 26-27</div>
       </div>
     </div>
 
     <nav class="sidebar-nav" id="nav">
-      <a class="nav-item active" href="#overview" data-p="overview" title="Overview: KPIs & Matching Breakdown">
+      <a class="nav-item active" href="#overview" data-p="overview" title="Dashboard: Overview, Charts & Performance League Table">
         <span class="nav-icon">📊</span>
-        <span class="nav-label">Overview</span>
+        <span class="nav-label">Dashboard</span>
       </a>
       <a class="nav-item" href="#report" data-p="report" title="Status Report: Complete Summary Sheet">
         <span class="nav-icon">📋</span>
         <span class="nav-label">Status Report</span>
       </a>
       <a class="nav-item" href="#sources" data-p="sources" title="Lookup & AMISP Master">
-        <span class="nav-icon">🗄️</span>
+        <span class="nav-icon">⚡</span>
         <span class="nav-label">Lookup &amp; AMISP Master</span>
       </a>
       <a class="nav-item" href="#circles" data-p="circles" title="Circle-wise Analysis">
         <span class="nav-icon">📈</span>
-        <span class="nav-label">Circle-wise Analysis</span>
+        <span class="nav-label">Circle-wise Summary</span>
       </a>
       <a class="nav-item" href="#exceptions" data-p="exceptions" title="Feeders Needing Correction">
         <span class="nav-icon">⚠️</span>
@@ -956,11 +753,12 @@ tr.grand td { font-weight: 700; border-top: 2px solid var(--accent); background:
       <header class="top-header">
         <div>
           <h1><button class="btn btn-hamburger" id="sidebarMobileToggle" type="button" title="Toggle Navigation Sidebar">☰</button> ⚡ UPPCL AMISP/FBP Feeder Mapping Dashboard</h1>
-          <p class="sub">Feeder Bay Portal vs AMISP MDM feeder masters · division, substation, feeder, meter number and MF</p>
+          <p class="sub">Executive Feeder Mapping Audit, Discom/AMISP Reconciliation &amp; Exception Analytics · As of <span id="subDate">—</span></p>
         </div>
         <div class="header-actions">
           <span class="db-badge">• Data as of <span id="asof">—</span></span>
-          <button class="btn btn-primary" id="csvTop" type="button" title="Download CSV for current view">⬇ Export CSV</button>
+          <a class="btn" href="#exceptions" title="Inspect feeders needing correction">🔍 Exception Explorer</a>
+          <button class="btn btn-primary" id="csvTop" type="button" title="Export CSV">⬇ Export CSV</button>
           <button class="btn btn-theme" id="theme" type="button" title="Toggle theme (Light / Dark / Midnight)">🌙</button>
         </div>
       </header>
@@ -990,58 +788,118 @@ tr.grand td { font-weight: 700; border-top: 2px solid var(--accent); background:
             <label for="fAmisp">AMISP</label>
             <select id="fAmisp"></select>
           </div>
-          <div class="f" data-f="view">
-            <span class="lab">Matching Basis</span>
-            <span class="seg" id="fView">
-              <button type="button" data-v="Direct" aria-pressed="true">Direct</button>
-              <button type="button" data-v="Manual" aria-pressed="false">Direct + manual</button>
-            </span>
+          <div class="f" data-f="zone">
+            <label for="fZone">Zone</label>
+            <select id="fZone"><option value="">All Zones</option></select>
+          </div>
+          <div class="f" data-f="search">
+            <label for="fSearch">Search Circle / Zone</label>
+            <input id="fSearch" type="search" placeholder="Zone or circle name...">
           </div>
           <div class="f">
             <button class="btn" id="reset" type="button">✕ Reset</button>
           </div>
         </div>
+        <div class="leave-out-bar" id="basisRow">
+          <span class="leave-out-title">Matching Basis</span>
+          <div class="seg" id="fView">
+            <button type="button" data-v="Direct" aria-pressed="true">Direct Matching</button>
+            <button type="button" data-v="Manual" aria-pressed="false">Direct + Manual</button>
+          </div>
+          <span class="muted" id="basisHint">Strict verbatim substation name match</span>
+        </div>
       </section>
       <div class="chips" id="activeChips" hidden></div>
 
-      <!-- ── 1 OVERVIEW ── -->
+      <!-- ── SECTION 1: DASHBOARD (#overview) ── -->
       <section class="page" id="p-overview" data-page="overview" aria-labelledby="h-overview">
-        <div class="kpis" id="kpis"></div>
-        <div class="kpi-footer-strip" id="ovStrip">—</div>
-
-        <div class="grid2">
-          <div class="panel">
-            <div class="ph">
-              <div>
-                <h2 id="h-overview">📊 Matching Status by Discom and AMISP</h2>
-                <p class="hint">Share of AMISP MDM feeders (excluding S/S, spare, incomer) in each status · Click any row to filter</p>
-              </div>
-            </div>
-            <div class="legend" id="statusLegend"></div>
-            <div class="sbars" id="statusBars"></div>
-          </div>
-
-          <div class="panel">
-            <div class="ph">
-              <div>
-                <h2>⚠️ Where the Remaining Gap Is</h2>
-                <p class="hint">Feeders not fully matched, by reason · Bar length on one shared scale · Click any row to filter</p>
-              </div>
-            </div>
-            <div class="sbars" id="gapBars"></div>
-            <div class="defs">
-              <div><b>MF mismatch</b>: everything agrees except the multiplying factor.</div>
-              <div><b>Meter mismatch</b>: feeder found, meter serial differs.</div>
-              <div><b>Division mismatch</b>: substation, feeder, meter &amp; MF agree; division differs.</div>
-              <div><b>Not matched</b>: no full feeder match (S/S mismatch or mapping not done).</div>
-            </div>
-          </div>
+        <!-- Headline KPIs -->
+        <div>
+          <div class="kpis" id="kpis"></div>
+          <div class="kpi-footer-strip" id="ovStrip">—</div>
         </div>
+
+        <!-- Row 1 Charts: Volumes Bar Chart + Match Rate Trend Line Chart -->
+        <div class="grid2">
+          <section class="panel">
+            <div class="ph">
+              <div>
+                <h2 id="h-overview">📊 Portal vs AMISP MDM vs Matched Feeders</h2>
+                <p class="hint">Feeder counts across Discom &amp; AMISP pairs (type Others, excl. S/S, spare, incomer)</p>
+              </div>
+              <span class="pill p-good" style="font-size:11px;" id="pillVolDate">—</span>
+            </div>
+            <div class="chart-box"><canvas id="chartVolumes"></canvas></div>
+          </section>
+
+          <section class="panel">
+            <div class="ph">
+              <div>
+                <h2>📈 Match Rate % Across Discom &amp; AMISP</h2>
+                <p class="hint">Meter &amp; MF Match % vs Overall Feeder Match % across pairs</p>
+              </div>
+              <span class="pill p-warn" style="font-size:11px;" id="pillRateBasis">Direct</span>
+            </div>
+            <div class="chart-box"><canvas id="chartRates"></canvas></div>
+          </section>
+        </div>
+
+        <!-- Row 2 Charts: Circle Match Slabs + Exception Reasons (PSR Slab Style!) -->
+        <div class="grid2">
+          <section class="panel">
+            <div class="ph">
+              <div>
+                <h2>📊 Circle Match Rate Slabs</h2>
+                <p class="hint">Distribution of circles by Meter &amp; MF match % · Click bar to inspect circles</p>
+              </div>
+              <span class="pill p-good" style="font-size:11px;">👆 Click bar to drilldown</span>
+            </div>
+            <div class="chart-box"><canvas id="chartCircleSlabs"></canvas></div>
+          </section>
+
+          <section class="panel">
+            <div class="ph">
+              <div>
+                <h2>📈 Remaining Gap &amp; Exception Slabs</h2>
+                <p class="hint">Feeders not fully matched by mismatch category · Click bar to inspect feeders</p>
+              </div>
+              <span class="pill p-warn" style="font-size:11px;">👆 Click bar to drilldown</span>
+            </div>
+            <div class="chart-box"><canvas id="chartExcSlabs"></canvas></div>
+          </section>
+        </div>
+
+        <!-- Performance League Table directly on Dashboard -->
+        <section class="panel" id="panelLeagueTable">
+          <div class="ph" style="flex-wrap:wrap;gap:12px;">
+            <div>
+              <h2>Performance league table</h2>
+              <p class="hint">Click a row to drill down one level · click headers to sort</p>
+              <div id="leagueBreadcrumb" style="margin-top:6px;font-size:12px;color:var(--ink-2);display:flex;align-items:center;gap:6px;flex-wrap:wrap;"></div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+              <div class="seg" id="leagueLevelSeg" role="group" aria-label="Hierarchy Level">
+                <button type="button" data-level="discom" aria-pressed="true">DISCOM</button>
+                <button type="button" data-level="pair" aria-pressed="false">Discom · AMISP</button>
+                <button type="button" data-level="zone" aria-pressed="false">Zone</button>
+                <button type="button" data-level="circle" aria-pressed="false">Circle</button>
+              </div>
+              <button class="btn" id="btnExportLeagueCsv" type="button">⬇ Export CSV</button>
+            </div>
+          </div>
+          <div class="tw" style="max-height:500px;overflow-y:auto;">
+            <table id="tblLeague">
+              <thead id="leagueHead"></thead>
+              <tbody id="leagueBody"></tbody>
+              <tfoot id="leagueFoot" style="position:sticky;bottom:0;z-index:2;"></tfoot>
+            </table>
+          </div>
+        </section>
       </section>
 
-      <!-- ── 2 STATUS REPORT ── -->
+      <!-- ── SECTION 2: STATUS REPORT ── -->
       <section class="page" id="p-report" data-page="report" aria-labelledby="h-report" hidden>
-        <div class="panel">
+        <section class="panel">
           <div class="ph">
             <div>
               <h2 id="h-report">📋 Status Report · Sheet <span id="sumSheet">—</span></h2>
@@ -1050,42 +908,43 @@ tr.grand td { font-weight: 700; border-top: 2px solid var(--accent); background:
             <button class="btn" type="button" id="csvReport">⬇ Download CSV</button>
           </div>
           <div class="tw scroll"><table id="reportTable"></table></div>
-        </div>
+        </section>
       </section>
 
-      <!-- ── 3 LOOKUP & MASTER ── -->
+      <!-- ── SECTION 3: LOOKUP & AMISP MASTER ── -->
       <section class="page" id="p-sources" data-page="sources" aria-labelledby="h-sources" hidden>
         <div class="grid2">
-          <div class="panel">
+          <section class="panel">
             <div class="ph">
               <div>
                 <h2 id="h-sources">🔍 How Each Portal Feeder Was Found</h2>
-                <p class="hint">All Feeder Bay Portal feeders. FBP Feeder = matched by feeder name; Meter No. = matched only by meter serial.</p>
+                <p class="hint">FBP Feeder = matched by feeder name · Meter No. = matched by meter serial</p>
               </div>
+              <span class="pill p-good" style="font-size:11px;">FBP Lookup</span>
             </div>
-            <div class="legend" id="lookupLegend"></div>
-            <div class="sbars" id="lookupBars"></div>
-          </div>
-          <div class="panel">
+            <div class="chart-box" style="height:280px;"><canvas id="chartLookup"></canvas></div>
+          </section>
+
+          <section class="panel">
             <div class="ph">
               <div>
-                <h2>🗄️ AMISP Feeder Master by TYPE</h2>
-                <p class="hint">Meters in AMISP MDM reports. Only "Others" feeders enter the status report comparison.</p>
+                <h2>⚡ AMISP Feeder Master by TYPE</h2>
+                <p class="hint">Meters in AMISP reports · Only "Others" feeders enter the status report</p>
               </div>
+              <span class="pill p-warn" style="font-size:11px;">AMISP Master</span>
             </div>
-            <div class="legend" id="masterLegend"></div>
-            <div class="sbars" id="masterBars"></div>
-          </div>
+            <div class="chart-box" style="height:280px;"><canvas id="chartMaster"></canvas></div>
+          </section>
         </div>
       </section>
 
-      <!-- ── 4 CIRCLES ── -->
+      <!-- ── SECTION 4: CIRCLES ── -->
       <section class="page" id="p-circles" data-page="circles" aria-labelledby="h-circles" hidden>
-        <div class="panel">
+        <section class="panel">
           <div class="ph">
             <div>
               <h2 id="h-circles">📈 Circle-wise Analysis</h2>
-              <p class="hint">Portal feeders of type Others (direct + manual matching combined). Click any column heading to sort. <span id="circleCount"></span></p>
+              <p class="hint">Portal feeders of type Others (direct + manual combined). Click a heading to sort. <span id="circleCount"></span></p>
             </div>
             <button class="btn" type="button" id="csvCircles">⬇ Download CSV</button>
           </div>
@@ -1093,16 +952,16 @@ tr.grand td { font-weight: 700; border-top: 2px solid var(--accent); background:
             <input type="search" id="circleSearch" placeholder="Search zone or circle..." aria-label="Search circles">
           </div>
           <div class="tw scroll"><table id="circleTable"></table></div>
-        </div>
+        </section>
       </section>
 
-      <!-- ── 5 EXCEPTIONS ── -->
+      <!-- ── SECTION 5: EXCEPTIONS ── -->
       <section class="page" id="p-exceptions" data-page="exceptions" aria-labelledby="h-exceptions" hidden>
-        <div class="panel">
+        <section class="panel">
           <div class="ph">
             <div>
               <h2 id="h-exceptions">⚠️ Feeders Needing Correction</h2>
-              <p class="hint">Portal feeders (type Others) not fully matched with the AMISP master, comparing portal vs AMISP side by side.</p>
+              <p class="hint">Portal feeders (type Others) not fully matched with the AMISP master, side by side.</p>
             </div>
             <button class="btn" type="button" id="csv">⬇ Download CSV</button>
           </div>
@@ -1113,12 +972,12 @@ tr.grand td { font-weight: 700; border-top: 2px solid var(--accent); background:
           </div>
           <div class="tw scroll"><table id="excTable"></table></div>
           <div style="display:grid;"><button class="btn more" type="button" id="excMore" hidden>Show 100 more</button></div>
-        </div>
+        </section>
       </section>
 
-      <!-- ── 6 METHODOLOGY ── -->
+      <!-- ── SECTION 6: METHODOLOGY ── -->
       <section class="page" id="p-method" data-page="method" aria-labelledby="h-method" hidden>
-        <div class="panel">
+        <section class="panel">
           <div class="ph">
             <div>
               <h2 id="h-method">📖 Methodology and Definitions</h2>
@@ -1148,7 +1007,7 @@ tr.grand td { font-weight: 700; border-top: 2px solid var(--accent); background:
               <li>Run <code>build_dashboard_data.py</code> to rebuild <code>data.js</code>, then push.</li>
             </ol></div>
           </div>
-        </div>
+        </section>
       </section>
 
       <footer class="foot"><span id="foot1">—</span><span id="foot2">—</span></footer>
@@ -1161,9 +1020,9 @@ tr.grand td { font-weight: 700; border-top: 2px solid var(--accent); background:
   <div class="modal-content">
     <div class="modal-header">
       <h3 id="modalTitle">📖 Methodology &amp; Data Notes</h3>
-      <button class="modal-close" id="modalClose" type="button" aria-label="Close modal">✕</button>
+      <button class="modal-close" id="modalClose" type="button" aria-label="Close modal">×</button>
     </div>
-    <div class="modal-body" id="modalBody">
+    <div class="modal-body">
       <h4>Matching Basis</h4>
       <ul>
         <li><b>Direct Matching</b>: Portal and AMISP substation names match verbatim.</li>
@@ -1178,14 +1037,13 @@ tr.grand td { font-weight: 700; border-top: 2px solid var(--accent); background:
         <li><b>Col 10 / 11 / 12</b>: MF mismatch, Meter No mismatch, and Division mismatch counts.</li>
         <li><b>Col 13</b>: Remaining unmatched feeders (<code>Col 5 - Col 6 - Col 12</code>).</li>
       </ul>
-      <h4>Data Scope</h4>
-      <p>Summary cards and overview charts cover the 4 non-KESCO Discoms (<b>PVVNL</b>, <b>DVVNL</b>, <b>MVVNL</b>, <b>PuVVNL</b>). KESCO is included in the Status Report table as entered in the workbook.</p>
+      <h4>Performance League Table</h4>
+      <p>Use the hierarchy toggle (<b>DISCOM</b> / <b>Discom · AMISP</b> / <b>Zone</b> / <b>Circle</b>) or click any row in the league table to drill down through Uttar Pradesh's feeder mapping hierarchy.</p>
     </div>
   </div>
 </div>
 
-<div class="tip" id="tip" role="tooltip"></div>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="data.js"></script>
 <script>
 (function(){
@@ -1198,13 +1056,23 @@ const fp = v => isNaN(v) ? "—" : v.toFixed(1)+"%";
 const esc = s => String(s==null?"":s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const ORDER = D.meta.order.map(([d,a]) => d+"|"+a);
 const DISCOM_FULL = {PVVNL:"Paschimanchal", DVVNL:"Dakshinanchal", MVVNL:"Madhyanchal", PuVVNL:"Purvanchal", KESCO:"KESCO"};
-const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
-const S = {discom:"", amisp:"", view:"Direct", circleSort:{k:"pct",dir:1}, excCat:"", excSearch:"", circleSearch:"", excLimit:100};
-const inSel = r => (!S.discom || r.discom===S.discom) && (!S.amisp || r.amisp===S.amisp);
 const store = {get(k){try{return localStorage.getItem(k)}catch(e){return null}}, set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+
+const S = {
+  discom: "", amisp: "", zone: "", search: "", view: "Direct",
+  leagueManualLevel: null,
+  leagueSort: { k: "pct", dir: 1 },
+  circleSort: { k: "pct", dir: 1 },
+  excCat: "", excSearch: "", circleSearch: "", excLimit: 100
+};
+
+const inSel = r => (!S.discom || r.discom===S.discom) && (!S.amisp || r.amisp===S.amisp);
+const inFullSel = r => inSel(r) && (!S.zone || r.zone===S.zone) && (!S.search || ((r.zone||"")+" "+(r.circle||"")+" "+(r.substation||"")+" "+(r.feeder||"")).toLowerCase().includes(S.search.toLowerCase()));
 
 /* header + meta */
 $("#asof").textContent = D.meta.asof;
+$("#subDate").textContent = D.meta.asof;
+$("#pillVolDate").textContent = D.meta.asof;
 $("#pFbp").textContent = D.meta.fbp_date;
 $("#pAmisp").textContent = D.meta.amisp_date;
 $("#pSheet").textContent = D.meta.summary_sheet;
@@ -1225,6 +1093,7 @@ if (store.get("amisp-collapsed")==="1") sidebar.classList.add("collapsed");
 $("#collapse").onclick = () => {
   sidebar.classList.toggle("collapsed");
   store.set("amisp-collapsed", sidebar.classList.contains("collapsed")?"1":"0");
+  setTimeout(resizeCharts, 240);
 };
 $("#sidebarMobileToggle").onclick = () => {
   sidebar.classList.toggle("mobile-open");
@@ -1236,23 +1105,24 @@ overlay.onclick = () => {
 };
 
 const PAGES = ["overview","report","sources","circles","exceptions","method"];
-const FILTERS = {overview:["discom","amisp","view"], report:["view"], sources:["discom","amisp"], circles:["discom","amisp"], exceptions:["discom","amisp"], method:[]};
+const FILTERS = {overview:["discom","amisp","zone","search","view"], report:["view"], sources:["discom","amisp"], circles:["discom","amisp","zone"], exceptions:["discom","amisp","zone"], method:[]};
 function show(p){
   if (!PAGES.includes(p)) p = "overview";
   document.querySelectorAll(".page").forEach(s => s.hidden = s.dataset.page!==p);
   const need = FILTERS[p];
   document.querySelectorAll("#filters [data-f]").forEach(f => f.hidden = !need.includes(f.dataset.f));
+  $("#basisRow").hidden = !need.includes("view");
   $("#filters").hidden = need.length===0;
   sidebar.classList.remove("mobile-open");
   overlay.classList.remove("active");
   scrollTo(0,0);
   document.querySelectorAll("#nav .nav-item").forEach(a => a.classList.toggle("active", a.dataset.p===p));
   renderChips();
+  setTimeout(resizeCharts, 50);
 }
 addEventListener("hashchange", () => show(location.hash.slice(1)));
-show(location.hash.slice(1));
 
-/* 3-state theme toggle (Light -> Dark -> Midnight) matching PSR Dashboard */
+/* 3-state theme toggle (Light -> Dark -> Midnight) */
 const THEMES = { light:{icon:"🌙", next:"dark", title:"Theme: Light (Click for Dark)"}, dark:{icon:"🌌", next:"midnight", title:"Theme: Dark (Click for Midnight)"}, midnight:{icon:"☀️", next:"light", title:"Theme: Midnight (Click for Light)"} };
 function applyTheme(t){
   const cfg = THEMES[t] || THEMES.light;
@@ -1266,6 +1136,7 @@ $("#theme").onclick = () => {
   const nxt = (THEMES[cur] || THEMES.light).next;
   applyTheme(nxt);
   store.set("amisp-theme", nxt);
+  updateChartThemes();
   render();
 };
 
@@ -1279,14 +1150,26 @@ addEventListener("keydown", e => { if (e.key==="Escape") modal.classList.remove(
 /* filters */
 const discoms = [...new Set(D.meta.order.map(o=>o[0]))];
 const amisps = [...new Set(D.meta.order.map(o=>o[1]))];
-$("#fDiscom").innerHTML = `<option value="">All Discoms</option>` + discoms.map(d=>`<option value="${d}">${d} · ${DISCOM_FULL[d]}</option>`).join("");
+$("#fDiscom").innerHTML = `<option value="">All of UPPCL (excl. KESCO)</option>` + discoms.map(d=>`<option value="${d}">${d} (${DISCOM_FULL[d]})</option>`).join("");
 $("#fAmisp").innerHTML = `<option value="">All AMISPs</option>` + amisps.map(a=>`<option>${a}</option>`).join("");
+
+function syncZoneOptions(){
+  const zones = [...new Set(D.circles.filter(inSel).map(r=>r.zone).filter(Boolean))].sort();
+  const prev = S.zone;
+  $("#fZone").innerHTML = `<option value="">All Zones</option>` + zones.map(z=>`<option value="${esc(z)}">${esc(z)}</option>`).join("");
+  S.zone = zones.includes(prev) ? prev : "";
+  $("#fZone").value = S.zone;
+}
 
 function syncFilterUI(){
   $("#fDiscom").value = S.discom;
   $("#fAmisp").value = S.amisp;
+  syncZoneOptions();
+  $("#fSearch").value = S.search;
   document.querySelectorAll("#fView button").forEach(x => x.setAttribute("aria-pressed", x.dataset.v===S.view));
   $("#basisBadge").textContent = S.view==="Direct" ? "Basis: Direct Matching" : "Basis: Direct + Manual";
+  $("#basisHint").textContent = S.view==="Direct" ? "Strict verbatim substation name match" : "Includes normalized & SS manual mapping matches";
+  $("#pillRateBasis").textContent = S.view==="Direct" ? "Direct" : "Direct + Manual";
   renderChips();
 }
 
@@ -1294,125 +1177,448 @@ function renderChips(){
   const p = location.hash.slice(1) || "overview";
   const need = FILTERS[p] || [];
   const list = [];
-  if (need.includes("discom") && S.discom) list.push(`<span class="chip filter-chip">Discom: <b>${esc(S.discom)}</b><button type="button" data-clr="discom" title="Clear Discom">×</button></span>`);
-  if (need.includes("amisp") && S.amisp) list.push(`<span class="chip filter-chip">AMISP: <b>${esc(S.amisp)}</b><button type="button" data-clr="amisp" title="Clear AMISP">×</button></span>`);
-  if (need.includes("view") && S.view==="Manual") list.push(`<span class="chip filter-chip">Basis: <b>Direct + manual</b><button type="button" data-clr="view" title="Revert to Direct">×</button></span>`);
+  if (need.includes("discom") && S.discom) list.push(`<span class="chip">Discom: <b>${esc(S.discom)}</b><button type="button" data-clr="discom">×</button></span>`);
+  if (need.includes("amisp") && S.amisp) list.push(`<span class="chip">AMISP: <b>${esc(S.amisp)}</b><button type="button" data-clr="amisp">×</button></span>`);
+  if (need.includes("zone") && S.zone) list.push(`<span class="chip">Zone: <b>${esc(S.zone)}</b><button type="button" data-clr="zone">×</button></span>`);
+  if (need.includes("search") && S.search) list.push(`<span class="chip">Search: <b>${esc(S.search)}</b><button type="button" data-clr="search">×</button></span>`);
+  if (need.includes("view") && S.view==="Manual") list.push(`<span class="chip">Basis: <b>Direct + manual</b><button type="button" data-clr="view">×</button></span>`);
   const box = $("#activeChips");
   if (!list.length) { box.hidden = true; box.innerHTML = ""; return; }
   box.hidden = false;
   box.innerHTML = `<span class="muted">Active filters:</span>` + list.join("");
   box.querySelectorAll("button[data-clr]").forEach(b => b.onclick = () => {
     const k = b.dataset.clr;
-    if (k==="discom") S.discom = "";
-    if (k==="amisp") S.amisp = "";
-    if (k==="view") S.view = "Direct";
+    if (k==="discom") { S.discom=""; S.zone=""; }
+    if (k==="amisp") S.amisp="";
+    if (k==="zone") S.zone="";
+    if (k==="search") S.search="";
+    if (k==="view") S.view="Direct";
+    S.leagueManualLevel = null;
     syncFilterUI();
     render();
   });
 }
 
-$("#fDiscom").onchange = e => { S.discom = e.target.value; syncFilterUI(); render(); };
-$("#fAmisp").onchange = e => { S.amisp = e.target.value; syncFilterUI(); render(); };
-document.querySelectorAll("#fView button").forEach(b => b.onclick = () => { S.view = b.dataset.v; syncFilterUI(); render(); });
-$("#reset").onclick = () => { S.discom = ""; S.amisp = ""; S.view = "Direct"; syncFilterUI(); render(); };
-$("#csvTop").onclick = () => { const p = location.hash.slice(1); (p==="circles" ? csvCircles : p==="exceptions" ? csvExceptions : csvReport)(); };
-
-/* ---------- tooltip ---------- */
-const tip = $("#tip");
-function showTip(e, html){ tip.innerHTML = html; tip.style.opacity = 1; moveTip(e); }
-function moveTip(e){ const w = tip.offsetWidth, h = tip.offsetHeight; let x = e.clientX+14, y = e.clientY+14; if(x+w>innerWidth-8) x = e.clientX-w-14; if(y+h>innerHeight-8) y = e.clientY-h-14; tip.style.left = x+"px"; tip.style.top = y+"px"; }
-function hideTip(){ tip.style.opacity = 0; }
-document.addEventListener("mousemove", e => { const t = e.target.closest("[data-tip]"); if(t) showTip(e, t.dataset.tip); else hideTip(); });
+$("#fDiscom").onchange = e => { S.discom=e.target.value; S.zone=""; S.leagueManualLevel=null; syncFilterUI(); render(); };
+$("#fAmisp").onchange = e => { S.amisp=e.target.value; S.leagueManualLevel=null; syncFilterUI(); render(); };
+$("#fZone").onchange = e => { S.zone=e.target.value; S.leagueManualLevel=null; syncFilterUI(); render(); };
+$("#fSearch").oninput = e => { S.search=e.target.value; renderChips(); render(); };
+document.querySelectorAll("#fView button").forEach(b => b.onclick = () => { S.view=b.dataset.v; syncFilterUI(); render(); });
+$("#reset").onclick = () => { S.discom=""; S.amisp=""; S.zone=""; S.search=""; S.view="Direct"; S.leagueManualLevel=null; syncFilterUI(); render(); };
+$("#csvTop").onclick = () => { const p = location.hash.slice(1); (p==="circles" ? csvCircles : p==="exceptions" ? csvExceptions : p==="report" ? csvReport : csvLeague)(); };
 
 /* ---------- helpers ---------- */
 function rowsFor(section){ return D.summary.filter(r=>r.section===section && r.discom!=="KESCO"); }
 function sumRows(rs){ const k=["fbp_total","mdm_total","fbp_others","mdm_others","mtr_mf","mf_mm","mtr_mm","div_mm","matched","not_matched"]; const o={}; k.forEach(x=>o[x]=rs.reduce((s,r)=>s+(r[x]||0),0)); return o; }
 function sortOrder(a,b){ return ORDER.indexOf(a.discom+"|"+a.amisp)-ORDER.indexOf(b.discom+"|"+b.amisp); }
-function stackRow(label, sub, parts, total, extraCls="", attrs=""){
-  const segs = parts.map(p => { const w = total ? p.v/total*100 : 0; return w>0 ? `<span style="width:${w}%;background:${p.c}" data-tip="${esc(`<b>${label}${sub?" · "+sub:""}</b>${p.n}: ${fmt(p.v)} (${fp(w)})`)}"></span>` : ""; }).join("");
-  const lead = parts[0] ? pct(parts[0].v,total) : NaN;
-  return `<div class="srow ${extraCls}" ${attrs}><div class="lab"><b>${esc(label)}</b>${sub?`<small>${esc(sub)}</small>`:""}</div><div class="track" role="img" aria-label="${esc(label)}">${segs}</div><div class="pct" title="${esc(parts[0]?parts[0].n:"")}">${fp(lead)}</div></div>`;
-}
-function legend(el, items){ el.innerHTML = items.map(i=>`<span><i style="background:${i.c}"></i>${esc(i.n)}</span>`).join(""); }
 
-/* ---------- KPIs ---------- */
-function renderKpis(){
-  const rs = rowsFor(S.view).filter(inSel), t = sumRows(rs);
-  const direct = sumRows(rowsFor("Direct").filter(inSel)), manual = sumRows(rowsFor("Manual").filter(inSel));
-  const scope = (S.discom||S.amisp) ? [S.discom, S.amisp].filter(Boolean).join(" · ") : "All Discoms except KESCO";
-  const k = [
-    {k:"Portal feeders (FBP)", v:fmt(t.fbp_total), s:`${fmt(t.fbp_others)} excl. S/S, spare, incomer`, kc:"--s1"},
-    {k:"AMISP MDM meters", v:fmt(t.mdm_total), s:`${fmt(t.mdm_others)} feeders of type Others`, kc:"--s7"},
-    {k:"Meter No & MF matched", v:fp(pct(t.mtr_mf,t.mdm_others)), s:`${fmt(t.mtr_mf)} of ${fmt(t.mdm_others)} feeders`, kc:"--good", vc:"--good", bar:pct(t.mtr_mf,t.mdm_others)},
-    {k:"Feeder matched", v:fp(pct(t.matched,t.mdm_others)), s:`${fmt(t.matched)} · any meter state`, kc:"--accent"},
-    {k:"Added by manual mapping", v:"+"+fmt(manual.mtr_mf-direct.mtr_mf), s:`meter & MF matches beyond direct`, kc:"--warn", vc:"--warn"},
-    {k:"Not matched", v:fmt(t.not_matched), s:`${fp(pct(t.not_matched,t.mdm_others))} of AMISP feeders`, kc:"--crit", vc:"--crit"},
-  ];
-  $("#kpis").innerHTML = k.map(x=>`<div class="kpi" style="--kpi-col:var(${x.kc});${x.vc?`--kpi-val-col:var(${x.vc})`:""}"><span class="lab">${esc(x.k)}</span><span class="v num">${esc(x.v)}</span><span class="u">${esc(x.s)}</span>${x.bar!=null?`<div class="meter"><b style="width:${Math.min(100,x.bar)}%"></b></div>`:""}</div>`).join("");
-  $("#ovStrip").innerHTML = `
-    <span>Scope: <b>${esc(scope)}</b></span>
-    <span>Matching: <b>${S.view==="Direct"?"Direct":"Direct + Manual"}</b></span>
-    <span>Circles: <b>${fmt(D.circles.filter(inSel).length)}</b></span>
-    <span>Exceptions: <b>${fmt(ER.filter(inSel).length)}</b></span>
-  `;
-}
+const EC = D.exceptions.cols, ER = D.exceptions.rows.map(r=>Object.fromEntries(EC.map((c,i)=>[c,r[i]])));
+const EXC_CATS = ["Mapping not done","Subtation mismatch","Meter No Mismatched","Meter No Matched, MF Mismatched","Division mismatch"];
+const SLAB_LABELS = ["≥ 98%","95–98%","90–95%","85–90%","75–85%","< 75%"];
+const SLAB_FILTER = {
+  "≥ 98%": p => p >= 98,
+  "95–98%": p => p >= 95 && p < 98,
+  "90–95%": p => p >= 90 && p < 95,
+  "85–90%": p => p >= 85 && p < 90,
+  "75–85%": p => p >= 75 && p < 85,
+  "< 75%": p => p < 75
+};
 
-/* ---------- status bars ---------- */
-function statusParts(r){
-  return [
-    {n:"Meter No & MF matched", v:r.mtr_mf, c:css("--c1")},
-    {n:"MF mismatch", v:r.mf_mm, c:css("--c2")},
-    {n:"Meter No mismatch", v:r.mtr_mm, c:css("--c3")},
-    {n:"Division mismatch", v:r.div_mm, c:css("--c4")},
-    {n:"Not matched", v:Math.max(0,r.not_matched), c:css("--c6")},
-  ];
-}
-function togglePairFilter(d, a){
-  if (S.discom===d && S.amisp===a) { S.discom = ""; S.amisp = ""; }
-  else { S.discom = d; S.amisp = a; }
-  syncFilterUI();
-  render();
-}
-function renderStatus(){
-  const rs = rowsFor(S.view).filter(inSel).sort(sortOrder);
-  legend($("#statusLegend"), statusParts(rs[0]||{}));
-  let h = rs.map(r => {
-    const active = S.discom===r.discom && S.amisp===r.amisp ? "active-row" : "";
-    return stackRow(`${r.discom} · ${r.amisp}`, `${fmt(r.mdm_others)} AMISP feeders`, statusParts(r), r.mdm_others, `clickable ${active}`, `data-pair="${esc(r.discom)}|${esc(r.amisp)}"`);
-  }).join("");
-  if (rs.length>1){ const t=sumRows(rs); h += stackRow("Total", `${fmt(t.mdm_others)} AMISP feeders`, statusParts(t), t.mdm_others, "total"); }
-  $("#statusBars").innerHTML = h || `<p class="muted">No rows for this filter.</p>`;
+/* ---------- Chart.js instances ---------- */
+let chVolumes = null, chRates = null, chCircleSlabs = null, chExcSlabs = null, chLookup = null, chMaster = null;
+const HAS_CHART = typeof Chart !== "undefined";
 
-  const gp = r => [
-    {n:"MF mismatch", v:r.mf_mm, c:css("--c2")},
-    {n:"Meter No mismatch", v:r.mtr_mm, c:css("--c3")},
-    {n:"Division mismatch", v:r.div_mm, c:css("--c4")},
-    {n:"Not matched", v:Math.max(0,r.not_matched), c:css("--c6")},
-  ];
-  const max = Math.max(1, ...rs.map(r=>gp(r).reduce((s,p)=>s+p.v,0)));
-  $("#gapBars").innerHTML = rs.map(r => {
-    const parts = gp(r), tot = parts.reduce((s,p)=>s+p.v,0);
-    const segs = parts.map(p=> p.v>0?`<span style="width:${p.v/max*100}%;background:${p.c}" data-tip="${esc(`<b>${r.discom} · ${r.amisp}</b>${p.n}: ${fmt(p.v)}`)}"></span>`:"").join("");
-    const active = S.discom===r.discom && S.amisp===r.amisp ? "active-row" : "";
-    return `<div class="srow clickable ${active}" data-pair="${esc(r.discom)}|${esc(r.amisp)}"><div class="lab"><b>${r.discom} · ${r.amisp}</b></div><div class="track" style="background:transparent">${segs}</div><div class="pct">${fmt(tot)}</div></div>`;
-  }).join("");
-
-  document.querySelectorAll(".srow.clickable[data-pair]").forEach(el => {
-    el.onclick = () => { const [d,a] = el.dataset.pair.split("|"); togglePairFilter(d,a); };
+function chartColors(){
+  const t = document.documentElement.getAttribute("data-theme") || "light";
+  const dark = t === "dark" || t === "midnight";
+  const mid = t === "midnight";
+  return {
+    grid: mid ? "rgba(56,189,248,0.08)" : (dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)"),
+    text: mid ? "#9db0cb" : (dark ? "#8791a0" : "#7a8494")
+  };
+}
+function updateChartThemes(){
+  if (!HAS_CHART) return;
+  const {grid, text} = chartColors();
+  [chVolumes, chRates, chCircleSlabs, chExcSlabs, chLookup, chMaster].forEach(c => {
+    if (!c) return;
+    if (c.options.scales.x) { c.options.scales.x.ticks.color = text; c.options.scales.x.grid.color = grid; }
+    if (c.options.scales.y) { c.options.scales.y.ticks.color = text; c.options.scales.y.grid.color = grid; }
+    if (c.options.plugins && c.options.plugins.legend && c.options.plugins.legend.labels) {
+      c.options.plugins.legend.labels.color = text;
+    }
+    c.update();
   });
 }
+function resizeCharts(){
+  [chVolumes, chRates, chCircleSlabs, chExcSlabs, chLookup, chMaster].forEach(c => { if (c) c.resize(); });
+}
+
+function initCharts(){
+  if (!HAS_CHART) return;
+  const {grid, text} = chartColors();
+
+  chVolumes = new Chart($("#chartVolumes"), {
+    type: "bar",
+    data: {
+      labels: [],
+      datasets: [
+        { label: "Portal (FBP) Others", data: [], backgroundColor: "#2a78d6", borderRadius: 4 },
+        { label: "AMISP MDM Others", data: [], backgroundColor: "#eb6834", borderRadius: 4 },
+        { label: "Meter & MF Matched", data: [], backgroundColor: "#1baf7a", borderRadius: 4 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: "top", labels: { boxWidth: 12, font: { size: 11 }, color: text } },
+        tooltip: { callbacks: { label: c => ` ${c.dataset.label}: ${fmt(c.raw)} feeders` } }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 10.5 }, color: text } },
+        y: { grid: { color: grid }, ticks: { font: { size: 11 }, color: text } }
+      }
+    }
+  });
+
+  chRates = new Chart($("#chartRates"), {
+    type: "line",
+    data: {
+      labels: [],
+      datasets: [
+        { label: "Meter & MF Match %", data: [], borderColor: "#1baf7a", backgroundColor: "rgba(27,175,122,0.12)", fill: true, tension: 0.3, borderWidth: 2.5, pointRadius: 4 },
+        { label: "Feeder Match % (Div+SS+Fdr)", data: [], borderColor: "#2a78d6", backgroundColor: "transparent", tension: 0.3, borderWidth: 2, borderDash: [5, 5], pointRadius: 3.5 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: "top", labels: { boxWidth: 12, font: { size: 11 }, color: text } },
+        tooltip: { callbacks: { label: c => ` ${c.dataset.label}: ${Number(c.raw).toFixed(1)}%` } }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 10.5 }, color: text } },
+        y: { grid: { color: grid }, ticks: { font: { size: 11 }, color: text, callback: v => v+"%" }, suggestedMin: 50, max: 100 }
+      }
+    }
+  });
+
+  chCircleSlabs = new Chart($("#chartCircleSlabs"), {
+    type: "bar",
+    data: { labels: SLAB_LABELS, datasets: [{ data: new Array(6).fill(0), backgroundColor: "#2a78d6", borderRadius: 4 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: c => ` Circles: ${fmt(c.raw)}`, afterLabel: () => "👉 Click to open Circle-wise Summary" } }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 11 }, color: text } },
+        y: { grid: { color: grid }, ticks: { font: { size: 11 }, color: text, precision: 0 } }
+      },
+      onClick: (e, els) => {
+        if (!els.length) return;
+        location.hash = "#circles";
+      }
+    }
+  });
+
+  chExcSlabs = new Chart($("#chartExcSlabs"), {
+    type: "bar",
+    data: { labels: ["Not Done","S/S Mismatch","Meter Mismatch","MF Mismatch","Div Mismatch"], datasets: [{ data: new Array(5).fill(0), backgroundColor: "#eb6834", borderRadius: 4 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: c => ` Feeders: ${fmt(c.raw)}`, afterLabel: () => "👉 Click to inspect feeders in Feeders to Correct" } }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 10.5 }, color: text } },
+        y: { grid: { color: grid }, ticks: { font: { size: 11 }, color: text, precision: 0 } }
+      },
+      onClick: (e, els) => {
+        if (!els.length) return;
+        S.excCat = EXC_CATS[els[0].index] || "";
+        S.excLimit = 100;
+        location.hash = "#exceptions";
+        renderExceptions();
+      }
+    }
+  });
+
+  chLookup = new Chart($("#chartLookup"), {
+    type: "bar",
+    data: {
+      labels: [],
+      datasets: [
+        { label: "FBP Feeder", data: [], backgroundColor: "#2a78d6", borderRadius: 4 },
+        { label: "Meter No.", data: [], backgroundColor: "#e0a42b", borderRadius: 4 },
+        { label: "Not Found", data: [], backgroundColor: "#b3261e", borderRadius: 4 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: "top", labels: { boxWidth: 12, font: { size: 11 }, color: text } } },
+      scales: {
+        x: { stacked: true, grid: { display: false }, ticks: { font: { size: 10.5 }, color: text } },
+        y: { stacked: true, grid: { color: grid }, ticks: { font: { size: 11 }, color: text } }
+      }
+    }
+  });
+
+  chMaster = new Chart($("#chartMaster"), {
+    type: "bar",
+    data: {
+      labels: [],
+      datasets: [
+        { label: "Others", data: [], backgroundColor: "#2a78d6", borderRadius: 4 },
+        { label: "Substation (SS)", data: [], backgroundColor: "#4a3aa7", borderRadius: 4 },
+        { label: "Incomer", data: [], backgroundColor: "#eb6834", borderRadius: 4 },
+        { label: "Spare", data: [], backgroundColor: "#7a8494", borderRadius: 4 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: "top", labels: { boxWidth: 12, font: { size: 11 }, color: text } } },
+      scales: {
+        x: { stacked: true, grid: { display: false }, ticks: { font: { size: 10.5 }, color: text } },
+        y: { stacked: true, grid: { color: grid }, ticks: { font: { size: 11 }, color: text } }
+      }
+    }
+  });
+}
+
+/* ---------- KPIs & Overview Charts ---------- */
+function renderOverview(){
+  const useCirclesScope = Boolean(S.zone || S.search);
+  const circSel = D.circles.filter(inFullSel);
+  const excSel = ER.filter(inFullSel);
+
+  let k;
+  if (!useCirclesScope) {
+    const rs = rowsFor(S.view).filter(inSel), t = sumRows(rs);
+    const direct = sumRows(rowsFor("Direct").filter(inSel)), manual = sumRows(rowsFor("Manual").filter(inSel));
+    k = [
+      {k:"Portal Feeders (FBP)", v:fmt(t.fbp_total), s:`${fmt(t.fbp_others)} excl. S/S, spare, incomer`, kc:"--s1"},
+      {k:"AMISP MDM Meters", v:fmt(t.mdm_total), s:`${fmt(t.mdm_others)} feeders of type Others`, kc:"--s7"},
+      {k:"Meter No & MF Matched", v:fp(pct(t.mtr_mf,t.mdm_others)), s:`${fmt(t.mtr_mf)} of ${fmt(t.mdm_others)} feeders`, kc:"--good", vc:"--good"},
+      {k:"Feeder Matched", v:fp(pct(t.matched,t.mdm_others)), s:`${fmt(t.matched)} · Div + S/S + Fdr`, kc:"--accent"},
+      {k:"Added by Manual Mapping", v:"+"+fmt(manual.mtr_mf-direct.mtr_mf), s:`meter & MF matches beyond direct`, kc:"--warn", vc:"--warn"},
+      {k:"Not Matched", v:fmt(t.not_matched), s:`${fp(pct(t.not_matched,t.mdm_others))} of AMISP feeders`, kc:"--crit", vc:"--crit"},
+    ];
+  } else {
+    const fdr = circSel.reduce((s,r)=>s+r.feeders,0);
+    const mtrMf = circSel.reduce((s,r)=>s+(r["Meter No & MF Matched"]||0),0);
+    const mfMm = circSel.reduce((s,r)=>s+(r["Meter No Matched, MF Mismatched"]||0),0);
+    const mtrMm = circSel.reduce((s,r)=>s+(r["Meter No Mismatched"]||0),0);
+    const divMm = circSel.reduce((s,r)=>s+(r["Division mismatch"]||0),0);
+    const ssMm = circSel.reduce((s,r)=>s+(r["Subtation mismatch"]||0),0);
+    const notDone = circSel.reduce((s,r)=>s+(r["Mapping not done"]||0),0);
+    const fdrMatched = mtrMf + mfMm + mtrMm;
+    k = [
+      {k:"Portal Feeders (Others)", v:fmt(fdr), s:`in selected Zone / Search`, kc:"--s1"},
+      {k:"Circles Matched", v:fmt(circSel.length), s:`filtered circle count`, kc:"--s7"},
+      {k:"Meter No & MF Matched", v:fp(pct(mtrMf,fdr)), s:`${fmt(mtrMf)} of ${fmt(fdr)} feeders`, kc:"--good", vc:"--good"},
+      {k:"Feeder Matched", v:fp(pct(fdrMatched,fdr)), s:`${fmt(fdrMatched)} · Div + S/S + Fdr`, kc:"--accent"},
+      {k:"MF / Meter / Div Mismatch", v:fmt(mfMm+mtrMm+divMm), s:`MF:${mfMm} · Mtr:${mtrMm} · Div:${divMm}`, kc:"--warn", vc:"--warn"},
+      {k:"Not Matched", v:fmt(ssMm+notDone), s:`S/S:${ssMm} · Pending:${notDone}`, kc:"--crit", vc:"--crit"},
+    ];
+  }
+  $("#kpis").innerHTML = k.map(x=>`<div class="kpi" style="--kpi-col:var(${x.kc});${x.vc?`--kpi-val-col:var(${x.vc})`:""}"><span class="lab">${esc(x.k)}</span><span class="v">${esc(x.v)}</span><span class="u">${esc(x.s)}</span></div>`).join("");
+
+  const c95 = circSel.filter(r => pct(r["Meter No & MF Matched"], r.feeders) >= 95).length;
+  $("#ovStrip").innerHTML = `
+    <span>Circles: <b>${fmt(circSel.length)}</b></span>
+    <span>Circles ≥95% Match: <b style="color:var(--good)">${fmt(c95)}</b></span>
+    <span>Exceptions to Correct: <b style="color:var(--crit)">${fmt(excSel.length)}</b></span>
+    <span>Master Meters (AMISP): <b>${fmt(D.counts.master_rows)}</b></span>
+    <span style="margin-left:auto;color:var(--ink-3);font-family:var(--mono);">As of ${esc(D.meta.asof)}</span>
+  `;
+
+  if (HAS_CHART) {
+    const rs = rowsFor(S.view).filter(inSel).sort(sortOrder);
+    const labels = rs.map(r => `${r.discom} · ${r.amisp}`);
+    chVolumes.data.labels = labels;
+    chVolumes.data.datasets[0].data = rs.map(r => r.fbp_others);
+    chVolumes.data.datasets[1].data = rs.map(r => r.mdm_others);
+    chVolumes.data.datasets[2].data = rs.map(r => r.mtr_mf);
+    chVolumes.update();
+
+    chRates.data.labels = labels;
+    chRates.data.datasets[0].data = rs.map(r => r.mdm_others ? +(r.mtr_mf/r.mdm_others*100).toFixed(1) : 0);
+    chRates.data.datasets[1].data = rs.map(r => r.mdm_others ? +(r.matched/r.mdm_others*100).toFixed(1) : 0);
+    chRates.update();
+
+    const slabCounts = SLAB_LABELS.map(lbl => circSel.filter(r => SLAB_FILTER[lbl](pct(r["Meter No & MF Matched"], r.feeders))).length);
+    chCircleSlabs.data.datasets[0].data = slabCounts;
+    chCircleSlabs.update();
+
+    const excCounts = EXC_CATS.map(c => excSel.filter(r => r.remark === c).length);
+    chExcSlabs.data.datasets[0].data = excCounts;
+    chExcSlabs.update();
+  }
+}
+
+/* ---------- Performance League Table ---------- */
+function getActiveLeagueLevel(){
+  if (S.leagueManualLevel) return S.leagueManualLevel;
+  if (S.zone) return "circle";
+  if (S.discom && S.amisp) return "zone";
+  if (S.discom) return "pair";
+  return "discom";
+}
+function renderLeagueBreadcrumbs(level){
+  const el = $("#leagueBreadcrumb");
+  const parts = [`<span class="league-crumb" data-crumb="root">Uttar Pradesh</span>`];
+  if (S.discom) parts.push(`<span>›</span><span class="league-crumb" data-crumb="discom">${esc(S.discom)}</span>`);
+  if (S.amisp) parts.push(`<span>›</span><span class="league-crumb" data-crumb="amisp">${esc(S.amisp)}</span>`);
+  if (S.zone) parts.push(`<span>›</span><span class="league-crumb" data-crumb="zone">${esc(S.zone)}</span>`);
+  const lname = level==="pair" ? "Discom · AMISP" : level.charAt(0).toUpperCase()+level.slice(1);
+  parts.push(`<span style="color:var(--ink-3);font-size:11px;">(Viewing: <b>${esc(lname)} level</b>)</span>`);
+  el.innerHTML = parts.join(" ");
+  el.querySelectorAll("[data-crumb]").forEach(c => c.onclick = () => {
+    const k = c.dataset.crumb;
+    if (k==="root") { S.discom=""; S.amisp=""; S.zone=""; }
+    else if (k==="discom") { S.amisp=""; S.zone=""; }
+    else if (k==="amisp") { S.zone=""; }
+    S.leagueManualLevel = null;
+    syncFilterUI();
+    render();
+  });
+}
+
+const LC = [
+  {k:"name", t:"Name", tx:1},
+  {k:"parent", t:"Parent", tx:1},
+  {k:"fbp", t:"FBP Others"},
+  {k:"mdm", t:"AMISP MDM"},
+  {k:"matched", t:"Fdr Match"},
+  {k:"mtr_mf", t:"Mtr & MF"},
+  {k:"pct", t:"Match %"},
+  {k:"mf_mm", t:"MF MM"},
+  {k:"mtr_mm", t:"Meter MM"},
+  {k:"div_mm", t:"Div MM"},
+  {k:"gap", t:"Not Matched"}
+];
+
+function renderLeagueTable(){
+  const level = getActiveLeagueLevel();
+  document.querySelectorAll("#leagueLevelSeg button").forEach(b => b.setAttribute("aria-pressed", b.dataset.level===level));
+  renderLeagueBreadcrumbs(level);
+
+  let rows = [];
+  if (level==="discom" || level==="pair") {
+    const rs = rowsFor(S.view).filter(inSel);
+    const map = new Map();
+    rs.forEach(r => {
+      const name = level==="discom" ? r.discom : `${r.discom} · ${r.amisp}`;
+      const parent = level==="discom" ? DISCOM_FULL[r.discom]||"UPPCL" : r.discom;
+      if (!map.has(name)) map.set(name, { name, parent, discom:r.discom, amisp: level==="pair"?r.amisp:"", fbp:0, mdm:0, matched:0, mtr_mf:0, mf_mm:0, mtr_mm:0, div_mm:0, gap:0 });
+      const it = map.get(name);
+      it.fbp += r.fbp_others; it.mdm += r.mdm_others; it.matched += r.matched; it.mtr_mf += r.mtr_mf;
+      it.mf_mm += r.mf_mm; it.mtr_mm += r.mtr_mm; it.div_mm += r.div_mm; it.gap += Math.max(0, r.not_matched);
+    });
+    rows = [...map.values()].map(x => ({...x, pct: pct(x.mtr_mf, x.mdm)}));
+  } else {
+    const circ = D.circles.filter(inFullSel);
+    const map = new Map();
+    circ.forEach(r => {
+      const name = level==="zone" ? r.zone : r.circle;
+      const parent = level==="zone" ? r.discom : `${r.zone} (${r.amisp})`;
+      const key = level==="zone" ? `${r.discom}|${name}` : `${r.discom}|${r.amisp}|${r.zone}|${name}`;
+      if (!map.has(key)) map.set(key, { name, parent, discom:r.discom, amisp:r.amisp, zone:r.zone, fbp:0, mdm:0, matched:0, mtr_mf:0, mf_mm:0, mtr_mm:0, div_mm:0, gap:0 });
+      const it = map.get(key);
+      const mfMm = r["Meter No Matched, MF Mismatched"]||0;
+      const mtrMm = r["Meter No Mismatched"]||0;
+      const mtrMf = r["Meter No & MF Matched"]||0;
+      const divMm = r["Division mismatch"]||0;
+      const ssMm = r["Subtation mismatch"]||0;
+      const notDone = r["Mapping not done"]||0;
+      it.fbp += r.feeders;
+      it.mdm += r.feeders;
+      it.matched += (mtrMf + mfMm + mtrMm);
+      it.mtr_mf += mtrMf;
+      it.mf_mm += mfMm;
+      it.mtr_mm += mtrMm;
+      it.div_mm += divMm;
+      it.gap += (ssMm + notDone);
+    });
+    rows = [...map.values()].map(x => ({...x, pct: pct(x.mtr_mf, x.fbp)}));
+  }
+
+  const {k, dir} = S.leagueSort;
+  const colCfg = LC.find(c => c.k===k) || LC[6];
+  rows.sort((a,b) => colCfg.tx ? String(a[k]).localeCompare(String(b[k]))*dir : (a[k]-b[k])*dir);
+  S.leagueCsv = { level, rows };
+
+  $("#leagueHead").innerHTML = `<tr>${LC.map(c => `<th class="${c.tx?"tx":""} ${c.k===k?"sorted":""}" data-lcol="${esc(c.k)}">${esc(c.t)} <span class="sort-ico">${c.k===k?(dir>0?"▲":"▼"):"↕"}</span></th>`).join("")}</tr>`;
+  $("#leagueHead").querySelectorAll("th").forEach(th => th.onclick = () => {
+    const kk = th.dataset.lcol;
+    const isTx = LC.find(x=>x.k===kk).tx;
+    S.leagueSort = { k:kk, dir: S.leagueSort.k===kk ? -S.leagueSort.dir : (isTx ? 1 : -1) };
+    renderLeagueTable();
+  });
+
+  const pillCls = p => p>=95 ? "p-good" : p>=85 ? "p-warn" : p>=75 ? "p-serious" : "p-crit";
+  $("#leagueBody").innerHTML = rows.length ? rows.map((r, idx) => `
+    <tr class="drill" data-idx="${idx}" title="Click to drill down">
+      <td class="tx"><b>${esc(r.name)}</b></td>
+      <td class="tx" style="color:var(--ink-2)">${esc(r.parent)}</td>
+      <td>${fmt(r.fbp)}</td>
+      <td>${fmt(r.mdm)}</td>
+      <td>${fmt(r.matched)}</td>
+      <td>${fmt(r.mtr_mf)}</td>
+      <td><span class="pill ${pillCls(r.pct)}">${fp(r.pct)}</span></td>
+      <td>${fmt(r.mf_mm)}</td>
+      <td>${fmt(r.mtr_mm)}</td>
+      <td>${fmt(r.div_mm)}</td>
+      <td style="${r.gap>0?"color:var(--crit);font-weight:600":""}">${fmt(r.gap)}</td>
+    </tr>`).join("") : `<tr><td colspan="11" style="text-align:center;padding:18px;color:var(--ink-3)">No records match the current filter.</td></tr>`;
+
+  $("#leagueBody").querySelectorAll("tr.drill").forEach(tr => tr.onclick = () => {
+    const r = rows[+tr.dataset.idx];
+    if (!r) return;
+    if (level==="discom") { S.discom = r.discom; S.leagueManualLevel = "pair"; }
+    else if (level==="pair") { S.discom = r.discom; S.amisp = r.amisp; S.leagueManualLevel = "zone"; }
+    else if (level==="zone") { S.discom = r.discom; S.zone = r.zone; S.leagueManualLevel = "circle"; }
+    else if (level==="circle") { S.discom = r.discom; S.amisp = r.amisp; S.zone = r.zone; S.excSearch = r.name; $("#excSearch").value = r.name; location.hash = "#exceptions"; syncFilterUI(); render(); return; }
+    syncFilterUI();
+    render();
+  });
+
+  const tot = rows.reduce((a,r) => ({fbp:a.fbp+r.fbp, mdm:a.mdm+r.mdm, matched:a.matched+r.matched, mtr_mf:a.mtr_mf+r.mtr_mf, mf_mm:a.mf_mm+r.mf_mm, mtr_mm:a.mtr_mm+r.mtr_mm, div_mm:a.div_mm+r.div_mm, gap:a.gap+r.gap}), {fbp:0,mdm:0,matched:0,mtr_mf:0,mf_mm:0,mtr_mm:0,div_mm:0,gap:0});
+  const totPct = pct(tot.mtr_mf, tot.mdm || tot.fbp);
+  $("#leagueFoot").innerHTML = `<tr class="grand">
+    <td class="tx">Total (${rows.length})</td>
+    <td class="tx">${esc(level.toUpperCase())}</td>
+    <td>${fmt(tot.fbp)}</td>
+    <td>${fmt(tot.mdm)}</td>
+    <td>${fmt(tot.matched)}</td>
+    <td>${fmt(tot.mtr_mf)}</td>
+    <td><span class="pill ${pillCls(totPct)}">${fp(totPct)}</span></td>
+    <td>${fmt(tot.mf_mm)}</td>
+    <td>${fmt(tot.mtr_mm)}</td>
+    <td>${fmt(tot.div_mm)}</td>
+    <td>${fmt(tot.gap)}</td>
+  </tr>`;
+}
+
+document.querySelectorAll("#leagueLevelSeg button").forEach(b => b.onclick = () => {
+  S.leagueManualLevel = b.dataset.level;
+  renderLeagueTable();
+});
 
 /* ---------- report table ---------- */
 function renderReport(){
   const rs = D.summary.filter(r=>r.section===S.view);
   const cols = [
-    ["fbp_total","Total feeders · Feeder Bay Portal","2"],["mdm_total","Total feeders · AMISP MDM","3"],
-    ["fbp_others","Excl. S/S, spare, incomer · FBP","4"],["mdm_others","Excl. S/S, spare, incomer · AMISP MDM","5"],
-    ["matched","Div, S/s & feeder matched","6=8+10+11"],["matched%","In %","7=6/5"],
-    ["mtr_mf","Meter No & MF match","8"],["mtr_mf%","In %","9=8/5"],
-    ["mf_mm","Meter No match, MF mismatch","10"],["mtr_mm","Meter No mismatch","11"],
-    ["div_mm","Division mismatch","12"],["not_matched", S.view==="Direct"?"S/s or feeder mismatched":"Mapping not done","13"]];
-  const cell = (r,k) => k.endsWith("%") ? `<td class="n pct">${fp(pct(r[k.slice(0,-1)], r.mdm_others))}</td>` : `<td class="n">${fmt(r[k])}</td>`;
+    ["fbp_total","Total feeders · FBP","2"],["mdm_total","Total feeders · AMISP MDM","3"],
+    ["fbp_others","Excl. S/S, spare, inc · FBP","4"],["mdm_others","Excl. S/S, spare, inc · MDM","5"],
+    ["matched","Div, S/s & Fdr matched","6=8+10+11"],["matched%","In %","7=6/5"],
+    ["mtr_mf","Meter & MF match","8"],["mtr_mf%","In %","9=8/5"],
+    ["mf_mm","MF mismatch","10"],["mtr_mm","Meter mismatch","11"],
+    ["div_mm","Div mismatch","12"],["not_matched", S.view==="Direct"?"S/s or fdr mismatch":"Mapping pending","13"]];
+  const cell = (r,k) => k.endsWith("%") ? `<td class="n">${fp(pct(r[k.slice(0,-1)], r.mdm_others))}</td>` : `<td class="n">${fmt(r[k])}</td>`;
   let body = "";
   const out = [];
   const csvVals = r => cols.map(c => c[0].endsWith("%") ? (r.mdm_others ? +(r[c[0].slice(0,-1)]/r.mdm_others*100).toFixed(1) : "") : r[c[0]]);
@@ -1420,35 +1626,41 @@ function renderReport(){
   const all = [];
   groups.forEach(g => {
     const gr = rs.filter(r=>r.discom===g).sort(sortOrder);
-    gr.forEach(r => { all.push(r); out.push([r.discom, r.amisp, ...csvVals(r)]); body += `<tr><td>${esc(r.discom)}</td><td>${esc(r.amisp)}</td>${cols.map(c=>cell(r,c[0])).join("")}</tr>`; });
-    if (gr.length>1 || g!=="KESCO"){ const t=sumRows(gr); out.push([g+" total", "", ...csvVals(t)]); body += `<tr class="sub"><td colspan="2">${esc(g)} total</td>${cols.map(c=>cell(t,c[0])).join("")}</tr>`; }
+    gr.forEach(r => { all.push(r); out.push([r.discom, r.amisp, ...csvVals(r)]); body += `<tr><td class="tx">${esc(r.discom)}</td><td class="tx">${esc(r.amisp)}</td>${cols.map(c=>cell(r,c[0])).join("")}</tr>`; });
+    if (gr.length>1 || g!=="KESCO"){ const t=sumRows(gr); out.push([g+" total", "", ...csvVals(t)]); body += `<tr class="sub"><td class="tx" colspan="2">${esc(g)} total</td>${cols.map(c=>cell(t,c[0])).join("")}</tr>`; }
   });
   const T = sumRows(all);
   out.push(["UPPCL total", "", ...csvVals(T)]);
   S.reportCsv = {hdr:["Discom","AMISP", ...cols.map(c=>`(${c[2]}) ${c[1]}`)], rows: out};
-  body += `<tr class="grand"><td colspan="2">UPPCL total</td>${cols.map(c=>cell(T,c[0])).join("")}</tr>`;
-  $("#reportTable").innerHTML = `<thead><tr><th>Discom</th><th>AMISP</th>${cols.map(c=>`<th class="n">${esc(c[1])}<span class="colnum">${esc(c[2])}</span></th>`).join("")}</tr></thead><tbody>${body}</tbody>`;
+  body += `<tr class="grand"><td class="tx" colspan="2">UPPCL total</td>${cols.map(c=>cell(T,c[0])).join("")}</tr>`;
+  $("#reportTable").innerHTML = `<thead><tr><th class="tx nosort">Discom</th><th class="tx nosort">AMISP</th>${cols.map(c=>`<th class="n nosort">${esc(c[1])}<span class="colnum">${esc(c[2])}</span></th>`).join("")}</tr></thead><tbody>${body}</tbody>`;
 }
 
-/* ---------- lookup + master ---------- */
+/* ---------- lookup + master Chart.js charts ---------- */
 function renderLookup(){
-  const cats = [["FBP Feeder",css("--c5")],["Meter No.",css("--c2")],["Not Found",css("--c6")]];
-  legend($("#lookupLegend"), cats.map(([n,c])=>({n,c})));
+  if (!HAS_CHART) return;
   const keys = D.meta.order.filter(([d,a])=>inSel({discom:d,amisp:a}));
-  $("#lookupBars").innerHTML = keys.map(([d,a]) => {
-    const rs = D.lookup.filter(r=>r.discom===d&&r.amisp===a), tot = rs.reduce((s,r)=>s+r.n,0);
-    const parts = cats.map(([n,c])=>({n, c, v:(rs.find(r=>r.lookup===n)||{n:0}).n}));
-    return stackRow(`${d} · ${a}`, `${fmt(tot)} portal feeders`, parts, tot);
-  }).join("");
+  const labels = keys.map(([d,a]) => `${d} · ${a}`);
 
-  const tcol = {Others:css("--c5"), SS:css("--c4"), Inc:css("--c2"), Spare:css("--c6")};
-  const types = ["Others","SS","Inc","Spare"];
-  legend($("#masterLegend"), types.map(n=>({n:n==="SS"?"Substation (SS)":n==="Inc"?"Incomer":n, c:tcol[n]})));
-  $("#masterBars").innerHTML = keys.map(([d,a]) => {
-    const rs = D.master.filter(r=>r.discom===d&&r.amisp===a), tot = rs.reduce((s,r)=>s+r.n,0);
-    const parts = types.map(t=>({n:t, c:tcol[t], v:(rs.find(r=>r.type===t)||{n:0}).n}));
-    return stackRow(`${d} · ${a}`, `${fmt(tot)} meters`, parts, tot);
-  }).join("");
+  const lCats = ["FBP Feeder","Meter No.","Not Found"];
+  chLookup.data.labels = labels;
+  lCats.forEach((cat, idx) => {
+    chLookup.data.datasets[idx].data = keys.map(([d,a]) => {
+      const r = D.lookup.find(x => x.discom===d && x.amisp===a && x.lookup===cat);
+      return r ? r.n : 0;
+    });
+  });
+  chLookup.update();
+
+  const mTypes = ["Others","SS","Inc","Spare"];
+  chMaster.data.labels = labels;
+  mTypes.forEach((tp, idx) => {
+    chMaster.data.datasets[idx].data = keys.map(([d,a]) => {
+      const r = D.master.find(x => x.discom===d && x.amisp===a && x.type===tp);
+      return r ? r.n : 0;
+    });
+  });
+  chMaster.update();
 }
 
 /* ---------- circle table ---------- */
@@ -1459,50 +1671,49 @@ const CC = [
   {k:"Division mismatch",t:"Div mismatch",n:1},{k:"Subtation mismatch",t:"S/S mismatch",n:1},{k:"Mapping not done",t:"Mapping not done",n:1}];
 function renderCircles(){
   const q = S.circleSearch.toLowerCase();
-  let rs = D.circles.filter(inSel).map(r=>({...r, pct:pct(r["Meter No & MF Matched"], r.feeders)}))
+  let rs = D.circles.filter(inFullSel).map(r=>({...r, pct:pct(r["Meter No & MF Matched"], r.feeders)}))
     .filter(r=>!q || (r.zone+" "+r.circle).toLowerCase().includes(q));
   const {k,dir} = S.circleSort, c = CC.find(x=>x.k===k);
   rs.sort((a,b)=> c.n ? (a[k]-b[k])*dir : String(a[k]).localeCompare(String(b[k]))*dir);
   $("#circleCount").textContent = `· ${rs.length} circles`;
   S.circleCsv = rs;
-  const head = `<thead><tr>${CC.map(x=>`<th class="${x.n?"n":""}" aria-sort="${x.k===k?(dir>0?"ascending":"descending"):"none"}"><button type="button" data-k="${esc(x.k)}">${esc(x.t)}</button></th>`).join("")}</tr></thead>`;
+  const head = `<thead><tr>${CC.map(x=>`<th class="${x.n?"n":"tx"}" aria-sort="${x.k===k?(dir>0?"ascending":"descending"):"none"}"><button type="button" data-k="${esc(x.k)}">${esc(x.t)}</button></th>`).join("")}</tr></thead>`;
   const body = rs.map(r => {
     const p = r.pct, col = p>=95?"--good":p>=85?"--warn":"--crit";
     return `<tr>${CC.map(x=>{
-      if (x.k==="pct") return `<td class="n"><div class="inbar"><span class="mono">${fp(p)}</span><span class="b"><i style="width:${p||0}%;background:var(${col})"></i></span></div></td>`;
-      return x.n ? `<td class="n">${fmt(r[x.k])}</td>` : `<td class="${x.k==='discom'||x.k==='amisp'?'nw':''}">${esc(r[x.k])}</td>`;
+      if (x.k==="pct") return `<td class="n"><div class="inbar"><span>${fp(p)}</span><span class="b"><i style="width:${p||0}%;background:var(${col})"></i></span></div></td>`;
+      return x.n ? `<td class="n">${fmt(r[x.k])}</td>` : `<td class="tx">${esc(r[x.k])}</td>`;
     }).join("")}</tr>`;
   }).join("");
   const cg = `<colgroup>${[7,7,10,13,7,8,12,7,7,7,8,7].map(w=>`<col style="width:${w}%">`).join("")}</colgroup>`;
-  $("#circleTable").innerHTML = cg + head + `<tbody>${body || `<tr><td colspan="${CC.length}" class="muted">No circles match.</td></tr>`}</tbody>`;
+  $("#circleTable").innerHTML = cg + head + `<tbody>${body || `<tr><td colspan="${CC.length}" class="tx muted">No circles match.</td></tr>`}</tbody>`;
   $("#circleTable").querySelectorAll("th button").forEach(b => b.onclick = () => { const kk=b.dataset.k; S.circleSort = {k:kk, dir: S.circleSort.k===kk ? -S.circleSort.dir : (CC.find(x=>x.k===kk).n? -1:1)}; renderCircles(); });
 }
 $("#circleSearch").oninput = e => {S.circleSearch=e.target.value; renderCircles();};
 
 /* ---------- exceptions ---------- */
-const EC = D.exceptions.cols, ER = D.exceptions.rows.map(r=>Object.fromEntries(EC.map((c,i)=>[c,r[i]])));
-const EXC_CATS = [["Mapping not done","--c6"],["Subtation mismatch","--c3"],["Meter No Mismatched","--c3"],["Meter No Matched, MF Mismatched","--c2"],["Division mismatch","--c4"]];
+const EXC_COLORS = [["Mapping not done","--na"],["Subtation mismatch","--serious"],["Meter No Mismatched","--crit"],["Meter No Matched, MF Mismatched","--warn"],["Division mismatch","--s7"]];
 const remarkPill = r => { const c = r==="Meter No Matched, MF Mismatched"||r==="Division mismatch" ? "p-warn" : "p-crit"; return `<span class="pill ${c}">${esc(r)}</span>`; };
 function excFiltered(){
   const q = S.excSearch.toLowerCase();
-  return ER.filter(r => inSel(r) && (!S.excCat || r.remark===S.excCat) &&
+  return ER.filter(r => inFullSel(r) && (!S.excCat || r.remark===S.excCat) &&
     (!q || [r.feeder,r.substation,r.division,r.circle,r.zone,r.meter,r.a_meter,r.a_feeder].join(" ").toLowerCase().includes(q)));
 }
 function renderExceptions(){
-  const base = ER.filter(inSel);
+  const base = ER.filter(inFullSel);
   $("#navCnt").textContent = fmt(base.length);
   $("#excChips").innerHTML = `<button type="button" class="chip cat-chip" data-c="" aria-pressed="${!S.excCat}">All <b>${fmt(base.length)}</b></button>` +
-    EXC_CATS.map(([c,v])=>`<button type="button" class="chip cat-chip" data-c="${esc(c)}" aria-pressed="${S.excCat===c}"><i style="background:var(${v})"></i>${esc(c)} <b>${fmt(base.filter(r=>r.remark===c).length)}</b></button>`).join("");
+    EXC_COLORS.map(([c,v])=>`<button type="button" class="chip cat-chip" data-c="${esc(c)}" aria-pressed="${S.excCat===c}"><i style="background:var(${v})"></i>${esc(c)} <b>${fmt(base.filter(r=>r.remark===c).length)}</b></button>`).join("");
   $("#excChips").querySelectorAll(".chip").forEach(b=>b.onclick=()=>{S.excCat=b.dataset.c; S.excLimit=100; renderExceptions();});
   const rs = excFiltered(), LIM = S.excLimit;
   $("#excCount").textContent = rs.length>LIM ? `Showing ${fmt(LIM)} of ${fmt(rs.length)} feeders` : `${fmt(rs.length)} feeders`;
-  const head = `<thead><tr><th>Discom</th><th>Circle / Division</th><th>Substation</th><th>Portal feeder</th><th>Portal meter · MF</th><th>AMISP feeder</th><th>AMISP meter · MF</th><th>Status</th><th>Found by</th></tr></thead>`;
+  const head = `<thead><tr><th class="tx nosort">Discom</th><th class="tx nosort">Circle / Division</th><th class="tx nosort">Substation</th><th class="tx nosort">Portal feeder</th><th class="tx nosort">Portal meter · MF</th><th class="tx nosort">AMISP feeder</th><th class="tx nosort">AMISP meter · MF</th><th class="tx nosort">Status</th><th class="tx nosort">Found by</th></tr></thead>`;
   const body = rs.slice(0,LIM).map(r=>{
     const mm = r.meter && r.a_meter && r.meter.toUpperCase()!==r.a_meter.toUpperCase();
-    return `<tr><td class="nw">${esc(r.discom)}<br><span class="muted">${esc(r.amisp)}</span></td><td>${esc(r.circle)}<br><span class="muted">${esc(r.division)}</span></td><td>${esc(r.substation)}${r.a_ss&&r.a_ss!==r.substation?`<br><span class="muted">AMISP: ${esc(r.a_ss)}</span>`:""}</td><td>${esc(r.feeder)}</td><td class="mono">${esc(r.meter)} · ${esc(r.mf)}</td><td>${esc(r.a_feeder)||'<span class="muted">—</span>'}</td><td class="mono" style="${mm?"color:var(--crit)":""}">${esc(r.a_meter)||"—"} · ${esc(r.a_mf)||"—"}</td><td>${remarkPill(r.remark)}</td><td class="muted">${esc(r.lookup)}</td></tr>`;
+    return `<tr><td class="tx">${esc(r.discom)}<br><span class="muted">${esc(r.amisp)}</span></td><td class="tx">${esc(r.circle)}<br><span class="muted">${esc(r.division)}</span></td><td class="tx">${esc(r.substation)}${r.a_ss&&r.a_ss!==r.substation?`<br><span class="muted">AMISP: ${esc(r.a_ss)}</span>`:""}</td><td class="tx">${esc(r.feeder)}</td><td class="tx" style="font-family:var(--mono);font-size:12px;">${esc(r.meter)} · ${esc(r.mf)}</td><td class="tx">${esc(r.a_feeder)||'<span class="muted">—</span>'}</td><td class="tx" style="font-family:var(--mono);font-size:12px;${mm?"color:var(--crit)":""}">${esc(r.a_meter)||"—"} · ${esc(r.a_mf)||"—"}</td><td class="tx">${remarkPill(r.remark)}</td><td class="tx muted">${esc(r.lookup)}</td></tr>`;
   }).join("");
   const cg = `<colgroup>${[7,13,12,16,10,15,10,11,6].map(w=>`<col style="width:${w}%">`).join("")}</colgroup>`;
-  $("#excTable").innerHTML = cg + head + `<tbody>${body || `<tr><td colspan="9" class="muted">No feeders match.</td></tr>`}</tbody>`;
+  $("#excTable").innerHTML = cg + head + `<tbody>${body || `<tr><td colspan="9" class="tx muted">No feeders match.</td></tr>`}</tbody>`;
   $("#excMore").hidden = rs.length <= LIM;
 }
 $("#excSearch").oninput = e => {S.excSearch=e.target.value; S.excLimit=100; renderExceptions();};
@@ -1511,7 +1722,7 @@ $("#excMore").onclick = () => {S.excLimit += 100; renderExceptions();};
 /* ---------- CSV downloads ---------- */
 function saveCsv(name, hdr, rows){
   const q = v => typeof v==="number" ? String(v) : `"${String(v==null?"":v).replace(/"/g,'""')}"`;
-  const scope = [S.discom, S.amisp].filter(Boolean).join("_");
+  const scope = [S.discom, S.amisp, S.zone].filter(Boolean).join("_");
   const csv = "\ufeff" + [hdr.map(q).join(","), ...rows.map(r=>r.map(q).join(","))].join("\r\n");
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));
@@ -1530,13 +1741,22 @@ function csvCircles(){
   const hdr = CC.map(x=>x.k==="pct"?"Match % (Meter & MF matched / feeders)":x.t);
   saveCsv("AMISP_circle_wise", hdr, S.circleCsv.map(r=>CC.map(x=> x.k==="pct" ? (isNaN(r.pct)?"":+r.pct.toFixed(1)) : r[x.k])));
 }
+function csvLeague(){
+  const L = S.leagueCsv;
+  if (!L) return;
+  const hdr = LC.map(c=>c.t);
+  saveCsv(`AMISP_league_${L.level}`, hdr, L.rows.map(r => LC.map(c => c.k==="pct" ? (isNaN(r.pct)?"":+r.pct.toFixed(1)) : r[c.k])));
+}
 $("#csv").onclick = csvExceptions;
 $("#csvReport").onclick = csvReport;
 $("#csvCircles").onclick = csvCircles;
+$("#btnExportLeagueCsv").onclick = csvLeague;
 
-/* ---------- render ---------- */
-function render(){ renderKpis(); renderStatus(); renderReport(); renderLookup(); renderCircles(); renderExceptions(); }
+/* ---------- init & render ---------- */
+initCharts();
+show(location.hash.slice(1));
 syncFilterUI();
+function render(){ renderOverview(); renderLeagueTable(); renderReport(); renderLookup(); renderCircles(); renderExceptions(); }
 render();
 })();
 </script>
