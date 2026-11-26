@@ -265,7 +265,7 @@ tr.drill{cursor:pointer}
         <span class="pill-s">Feeder Bay Portal: <b id="pFbp">—</b></span>
         <span class="pill-s">AMISP reports: <b id="pAmisp">—</b></span>
         <span class="pill-s">Status sheet: <b id="pSheet">—</b></span>
-        <span class="pill-s scope">Scope: 4 Discoms, excl. KESCO</span>
+        <span class="pill-s scope">Totals: All Discoms · Comparison: excl. KESCO</span>
       </div>
     </header>
 
@@ -491,13 +491,14 @@ function legend(el, items){ el.innerHTML = items.map(i=>`<span><i style="backgro
 
 /* ---------- KPIs ---------- */
 function renderKpis(){
+  const tAll = sumRows(D.summary.filter(r=>r.section===S.view).filter(inSel));
   const rs = rowsFor(S.view).filter(inSel), t = sumRows(rs);
   const direct = sumRows(rowsFor("Direct").filter(inSel)), manual = sumRows(rowsFor("Manual").filter(inSel));
-  const scope = (S.discom||S.amisp) ? [S.discom, S.amisp].filter(Boolean).join(" · ") : "All Discoms except KESCO";
+  const scope = (S.discom||S.amisp) ? [S.discom, S.amisp].filter(Boolean).join(" · ") : "Totals incl. KESCO · comparison excl. KESCO";
   $("#ovNote").textContent = `${scope} · ${S.view==="Direct"?"direct matching":"direct + manual matching"} · as of ${D.meta.asof}`;
   const k = [
-    {k:"Portal feeders (FBP)", v:fmt(t.fbp_total), s:`${fmt(t.fbp_others)} excl. S/S, spare, incomer`, kc:"--brand-2"},
-    {k:"AMISP MDM meters", v:fmt(t.mdm_total), s:`${fmt(t.mdm_others)} feeders of type Others`, kc:"--c4"},
+    {k:"Portal feeders (FBP)", v:fmt(tAll.fbp_total), s:`${fmt(tAll.fbp_others)} excl. S/S, spare, incomer`, kc:"--brand-2"},
+    {k:"AMISP MDM meters", v:fmt(tAll.mdm_total), s:`${fmt(tAll.mdm_others)} feeders of type Others`, kc:"--c4"},
     {k:"Meter No & MF matched", v:fp(pct(t.mtr_mf,t.mdm_others)), s:`${fmt(t.mtr_mf)} of ${fmt(t.mdm_others)} feeders`, kc:"--ok", vc:"--ok", bar:pct(t.mtr_mf,t.mdm_others)},
     {k:"Feeder matched", v:fp(pct(t.matched,t.mdm_others)), s:`${fmt(t.matched)} · any meter state`, kc:"--c5"},
     {k:"Added by manual mapping", v:"+"+fmt(manual.mtr_mf-direct.mtr_mf), s:`meter & MF matches beyond direct`, kc:"--warn"},
