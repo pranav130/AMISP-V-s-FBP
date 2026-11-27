@@ -481,7 +481,7 @@ if (store.get("amisp-collapsed")==="1") app.classList.add("collapsed");
 $("#collapse").onclick = () => { app.classList.toggle("collapsed"); store.set("amisp-collapsed", app.classList.contains("collapsed")?"1":"0"); if (chVolumes) setTimeout(() => chVolumes.resize(), 220); };
 const PAGES = ["overview","report","sources","circles","exceptions","method"];
 /* which filters change the figures on each page */
-const FILTERS = {overview:["discom","amisp","view"], report:["view"], sources:["discom","amisp","view"], circles:["discom","amisp","zone","circle","division","substation","view"], exceptions:["discom","amisp","view"], method:["view"]};
+const FILTERS = {overview:["discom","amisp","view"], report:["view"], sources:["discom","amisp"], circles:["discom","amisp","zone","circle","division","substation","view"], exceptions:["discom","amisp","view"], method:["view"]};
 function show(p){
   if (!PAGES.includes(p)) p = "overview";
   document.querySelectorAll(".page").forEach(s => s.hidden = s.dataset.page!==p);
