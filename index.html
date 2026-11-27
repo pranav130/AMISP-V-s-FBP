@@ -161,11 +161,15 @@ td.pct{font-family:var(--f-mono)}
 #excTable td{vertical-align:top}
 #circleTable th,#circleTable td{padding:7px 8px}
 
-#excTable,#circleTable{table-layout:fixed}
-#excTable td,#circleTable td{overflow-wrap:anywhere}
+#excTable{table-layout:fixed}
+#excTable td{overflow-wrap:anywhere}
 #excTable td.mono{white-space:normal}
 #excTable .pill{white-space:normal}
 #excTable td.nw{white-space:normal}
+#circleTable th,#circleTable td{padding:7px 8px;font-size:12.5px}
+#circleTable td.n{font-family:var(--f-mono)}
+#circleTable tfoot tr.grand td{font-weight:700;background:var(--brand-soft);border-top:2px solid var(--brand)}
+.filters .fld select{min-width:145px;max-width:210px}
 
 /* performance league table */
 .league-head{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:flex-start;justify-content:space-between}
@@ -272,6 +276,10 @@ tr.drill{cursor:pointer}
     <div class="filters" id="filters" role="group" aria-label="Filters for all sections">
       <label class="fld" data-f="discom" for="fDiscom"><span>Discom</span><select id="fDiscom"></select></label>
       <label class="fld" data-f="amisp" for="fAmisp"><span>AMISP</span><select id="fAmisp"></select></label>
+      <label class="fld" data-f="zone" for="fZone"><span>Zone</span><select id="fZone"><option value="">All Zones</option></select></label>
+      <label class="fld" data-f="circle" for="fCircle"><span>Circle</span><select id="fCircle"><option value="">All Circles</option></select></label>
+      <label class="fld" data-f="division" for="fDivision"><span>Division</span><select id="fDivision"><option value="">All Divisions</option></select></label>
+      <label class="fld" data-f="substation" for="fSubstation"><span>Substation</span><select id="fSubstation"><option value="">All Substations</option></select></label>
       <div class="fld" data-f="view"><span>Matching basis</span>
         <span class="seg" id="fView"><button type="button" data-v="Direct" aria-pressed="true">Direct</button><button type="button" data-v="Manual" aria-pressed="false">Direct + manual</button></span>
       </div>
@@ -360,9 +368,33 @@ tr.drill{cursor:pointer}
 
       <!-- 4 Circles -->
       <section class="page" id="p-circles" data-page="circles" aria-labelledby="h-circles" hidden>
-        <div class="page-head"><h2 id="h-circles">Circle-wise analysis</h2><p>Portal feeders of type Others, direct and manual matching combined. Click a heading to sort. <span id="circleCount"></span></p></div>
-        <div class="toolbar"><input type="search" id="circleSearch" placeholder="Search zone or circle" aria-label="Search circles"><button class="btn" type="button" id="csvCircles"><svg class="ic" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Download CSV</button></div>
-        <div class="tscroll"><table id="circleTable"></table></div>
+        <div class="card">
+          <div class="league-head">
+            <div>
+              <h2 id="h-circles" style="font-size:16px">Circle-wise analysis</h2>
+              <p class="note">Click a row to drill down one level · click headers to sort · <span id="circleCount"></span></p>
+              <div id="circleBreadcrumb" style="margin-top:6px;font-size:12px;color:var(--ink-2);display:flex;align-items:center;gap:6px;flex-wrap:wrap;"></div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+              <div class="seg" id="circleLevelSeg" role="group" aria-label="Hierarchy Level">
+                <button type="button" data-level="discom" aria-pressed="true">DISCOM</button>
+                <button type="button" data-level="zone" aria-pressed="false">Zone</button>
+                <button type="button" data-level="circle" aria-pressed="false">Circle</button>
+                <button type="button" data-level="division" aria-pressed="false">Division</button>
+                <button type="button" data-level="substation" aria-pressed="false">Substation</button>
+              </div>
+              <button class="btn" type="button" id="csvCircles"><svg class="ic" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Download CSV</button>
+            </div>
+          </div>
+          <div class="toolbar"><input type="search" id="circleSearch" placeholder="Search discom, zone, circle, division or substation" aria-label="Search hierarchy"></div>
+          <div class="tscroll" style="max-height:540px;overflow:auto;">
+            <table id="circleTable">
+              <thead id="circleHead"></thead>
+              <tbody id="circleBody"></tbody>
+              <tfoot id="circleFoot" style="position:sticky;bottom:0;z-index:1;"></tfoot>
+            </table>
+          </div>
+        </div>
       </section>
 
       <!-- 5 Exceptions -->
@@ -417,7 +449,7 @@ const esc = s => String(s==null?"":s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":
 const ORDER = D.meta.order.map(([d,a]) => d+"|"+a);
 const DISCOM_FULL = {PVVNL:"Paschimanchal", DVVNL:"Dakshinanchal", MVVNL:"Madhyanchal", PuVVNL:"Purvanchal", KESCO:"KESCO"};
 const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
-const S = {discom:"", amisp:"", zone:"", view:"Direct", leagueManualLevel:null, leagueSort:{k:"pct",dir:1}, circleSort:{k:"pct",dir:1}, excCat:"", excSearch:"", circleSearch:"", excLimit:100};
+const S = {discom:"", amisp:"", zone:"", circle:"", division:"", substation:"", view:"Direct", leagueManualLevel:null, circleManualLevel:null, leagueSort:{k:"pct",dir:1}, circleSort:{k:"pct",dir:1}, excCat:"", excSearch:"", circleSearch:"", excLimit:100};
 const inSel = r => (!S.discom || r.discom===S.discom) && (!S.amisp || r.amisp===S.amisp);
 const store = {get(k){try{return localStorage.getItem(k)}catch(e){return null}}, set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 
@@ -442,7 +474,7 @@ if (store.get("amisp-collapsed")==="1") app.classList.add("collapsed");
 $("#collapse").onclick = () => { app.classList.toggle("collapsed"); store.set("amisp-collapsed", app.classList.contains("collapsed")?"1":"0"); if (chVolumes) setTimeout(() => chVolumes.resize(), 220); };
 const PAGES = ["overview","report","sources","circles","exceptions","method"];
 /* which filters change the figures on each page */
-const FILTERS = {overview:["discom","amisp","view"], report:["view"], sources:["discom","amisp"], circles:["discom","amisp"], exceptions:["discom","amisp"], method:[]};
+const FILTERS = {overview:["discom","amisp","view"], report:["view"], sources:["discom","amisp"], circles:["discom","amisp","zone","circle","division","substation"], exceptions:["discom","amisp"], method:[]};
 function show(p){
   if (!PAGES.includes(p)) p = "overview";
   document.querySelectorAll(".page").forEach(s => s.hidden = s.dataset.page!==p);
@@ -461,14 +493,41 @@ if (savedTheme) document.documentElement.dataset.theme = savedTheme;
 $("#theme").onclick = () => { const t = document.documentElement.dataset.theme==="dark" ? "light" : "dark"; document.documentElement.dataset.theme = t; store.set("amisp-theme", t); render(); };
 
 /* filters */
+const SC = D.substations ? D.substations.cols : [];
+const SR = D.substations ? D.substations.rows.map(r => Object.fromEntries(SC.map((c,i)=>[c,r[i]]))) : D.circles.map(r=>({...r, division:"", substation:""}));
 const discoms = [...new Set(D.meta.order.map(o=>o[0]))];
 const amisps = [...new Set(D.meta.order.map(o=>o[1]))];
 $("#fDiscom").innerHTML = `<option value="">All Discoms</option>` + discoms.map(d=>`<option value="${d}">${d} · ${DISCOM_FULL[d]}</option>`).join("");
 $("#fAmisp").innerHTML = `<option value="">All AMISPs</option>` + amisps.map(a=>`<option>${a}</option>`).join("");
-$("#fDiscom").onchange = e => {S.discom=e.target.value; S.zone=""; S.leagueManualLevel=null; render();};
-$("#fAmisp").onchange = e => {S.amisp=e.target.value; S.leagueManualLevel=null; render();};
+
+function syncCascade(){
+  $("#fDiscom").value = S.discom;
+  $("#fAmisp").value = S.amisp;
+  const fill = (id, allLabel, list, curKey) => {
+    const uniq = [...new Set(list.filter(Boolean))].sort();
+    if (!uniq.includes(S[curKey])) S[curKey] = "";
+    $(id).innerHTML = `<option value="">${allLabel}</option>` + uniq.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join("");
+    $(id).value = S[curKey];
+  };
+  const r1 = SR.filter(inSel);
+  fill("#fZone", "All Zones", r1.map(r=>r.zone), "zone");
+  const r2 = r1.filter(r => !S.zone || r.zone===S.zone);
+  fill("#fCircle", "All Circles", r2.map(r=>r.circle), "circle");
+  const r3 = r2.filter(r => !S.circle || r.circle===S.circle);
+  fill("#fDivision", "All Divisions", r3.map(r=>r.division), "division");
+  const r4 = r3.filter(r => !S.division || r.division===S.division);
+  fill("#fSubstation", "All Substations", r4.map(r=>r.substation), "substation");
+}
+
+$("#fDiscom").onchange = e => {S.discom=e.target.value; S.zone=""; S.circle=""; S.division=""; S.substation=""; S.leagueManualLevel=null; S.circleManualLevel=null; syncCascade(); render();};
+$("#fAmisp").onchange = e => {S.amisp=e.target.value; S.zone=""; S.circle=""; S.division=""; S.substation=""; S.leagueManualLevel=null; S.circleManualLevel=null; syncCascade(); render();};
+$("#fZone").onchange = e => {S.zone=e.target.value; S.circle=""; S.division=""; S.substation=""; S.circleManualLevel=null; syncCascade(); renderCircles();};
+$("#fCircle").onchange = e => {S.circle=e.target.value; S.division=""; S.substation=""; S.circleManualLevel=null; syncCascade(); renderCircles();};
+$("#fDivision").onchange = e => {S.division=e.target.value; S.substation=""; S.circleManualLevel=null; syncCascade(); renderCircles();};
+$("#fSubstation").onchange = e => {S.substation=e.target.value; S.circleManualLevel=null; syncCascade(); renderCircles();};
 document.querySelectorAll("#fView button").forEach(b => b.onclick = () => {S.view=b.dataset.v; document.querySelectorAll("#fView button").forEach(x=>x.setAttribute("aria-pressed", x===b)); render();});
-$("#reset").onclick = () => {S.discom="";S.amisp="";S.zone="";S.leagueManualLevel=null;S.view="Direct";$("#fDiscom").value="";$("#fAmisp").value="";document.querySelectorAll("#fView button").forEach(x=>x.setAttribute("aria-pressed", x.dataset.v==="Direct"));render();};
+$("#reset").onclick = () => {S.discom="";S.amisp="";S.zone="";S.circle="";S.division="";S.substation="";S.leagueManualLevel=null;S.circleManualLevel=null;S.view="Direct";syncCascade();document.querySelectorAll("#fView button").forEach(x=>x.setAttribute("aria-pressed", x.dataset.v==="Direct"));render();};
+syncCascade();
 $("#csvTop").onclick = () => { const p = location.hash.slice(1); (p==="circles" ? csvCircles : p==="exceptions" ? csvExceptions : csvReport)(); };
 
 /* ---------- tooltip ---------- */
@@ -727,32 +786,146 @@ function renderLookup(){
   }).join("");
 }
 
-/* ---------- circle table ---------- */
+/* ---------- circle-wise analysis (Performance league table style: Discom -> Zone -> Circle -> Division -> Substation) ---------- */
 const CC = [
-  {k:"discom",t:"Discom"},{k:"amisp",t:"AMISP"},{k:"zone",t:"Zone"},{k:"circle",t:"Circle"},
-  {k:"feeders",t:"Feeders",n:1},{k:"Meter No & MF Matched",t:"Meter & MF matched",n:1},{k:"pct",t:"Match %",n:1},
-  {k:"Meter No Matched, MF Mismatched",t:"MF mismatch",n:1},{k:"Meter No Mismatched",t:"Meter mismatch",n:1},
-  {k:"Division mismatch",t:"Div mismatch",n:1},{k:"Subtation mismatch",t:"S/S mismatch",n:1},{k:"Mapping not done",t:"Mapping not done",n:1}];
-function renderCircles(){
-  const q = S.circleSearch.toLowerCase();
-  let rs = D.circles.filter(inSel).map(r=>({...r, pct:pct(r["Meter No & MF Matched"], r.feeders)}))
-    .filter(r=>!q || (r.zone+" "+r.circle).toLowerCase().includes(q));
-  const {k,dir} = S.circleSort, c = CC.find(x=>x.k===k);
-  rs.sort((a,b)=> c.n ? (a[k]-b[k])*dir : String(a[k]).localeCompare(String(b[k]))*dir);
-  $("#circleCount").textContent = `· ${rs.length} circles`;
-  S.circleCsv = rs;
-  const head = `<thead><tr>${CC.map(x=>`<th class="${x.n?"n":""}" aria-sort="${x.k===k?(dir>0?"ascending":"descending"):"none"}"><button type="button" data-k="${esc(x.k)}">${esc(x.t)}</button></th>`).join("")}</tr></thead>`;
-  const body = rs.map(r => {
-    const p = r.pct, col = p>=95?"--ok":p>=85?"--warn":"--bad";
-    return `<tr>${CC.map(x=>{
-      if (x.k==="pct") return `<td class="n"><div class="inbar"><span class="mono">${fp(p)}</span><span class="b"><i style="width:${p||0}%;background:var(${col})"></i></span></div></td>`;
-      return x.n ? `<td class="n">${fmt(r[x.k])}</td>` : `<td class="${x.k==='discom'||x.k==='amisp'?'nw':''}">${esc(r[x.k])}</td>`;
-    }).join("")}</tr>`;
-  }).join("");
-  const cg = `<colgroup>${[7,7,10,13,7,8,12,7,7,7,8,7].map(w=>`<col style="width:${w}%">`).join("")}</colgroup>`;
-  $("#circleTable").innerHTML = cg + head + `<tbody>${body || `<tr><td colspan="${CC.length}" class="muted">No circles match.</td></tr>`}</tbody>`;
-  $("#circleTable").querySelectorAll("th button").forEach(b => b.onclick = () => { const kk=b.dataset.k; S.circleSort = {k:kk, dir: S.circleSort.k===kk ? -S.circleSort.dir : (CC.find(x=>x.k===kk).n? -1:1)}; renderCircles(); });
+  {k:"name",t:"Name"},{k:"parent",t:"Parent"},{k:"amisp",t:"AMISP"},
+  {k:"feeders",t:"Feeders",n:1},{k:"mtr_mf",t:"Meter & MF matched",n:1},{k:"pct",t:"Match %",n:1},
+  {k:"mf_mm",t:"MF mismatch",n:1},{k:"mtr_mm",t:"Meter mismatch",n:1},
+  {k:"div_mm",t:"Div mismatch",n:1},{k:"ss_mm",t:"S/S mismatch",n:1},{k:"not_done",t:"Mapping not done",n:1}
+];
+function getCircleLevel(){
+  if (S.circleManualLevel) return S.circleManualLevel;
+  if (S.division || S.substation) return "substation";
+  if (S.circle) return "division";
+  if (S.zone) return "circle";
+  if (S.discom) return "zone";
+  return "discom";
 }
+function renderCircleBreadcrumbs(level){
+  const el = $("#circleBreadcrumb");
+  const parts = [`<span class="league-crumb" data-ccrumb="root">Uttar Pradesh</span>`];
+  if (S.discom) parts.push(`<span>›</span><span class="league-crumb" data-ccrumb="discom">${esc(S.discom)}</span>`);
+  if (S.zone) parts.push(`<span>›</span><span class="league-crumb" data-ccrumb="zone">${esc(S.zone)}</span>`);
+  if (S.circle) parts.push(`<span>›</span><span class="league-crumb" data-ccrumb="circle">${esc(S.circle)}</span>`);
+  if (S.division) parts.push(`<span>›</span><span class="league-crumb" data-ccrumb="division">${esc(S.division)}</span>`);
+  if (S.substation) parts.push(`<span>›</span><span class="league-crumb" data-ccrumb="substation">${esc(S.substation)}</span>`);
+  parts.push(`<span class="muted">(Viewing: <b>${esc(level.charAt(0).toUpperCase()+level.slice(1))} level</b>)</span>`);
+  el.innerHTML = parts.join(" ");
+  el.querySelectorAll("[data-ccrumb]").forEach(c => c.onclick = () => {
+    const k = c.dataset.ccrumb;
+    if (k==="root") { S.discom=""; S.zone=""; S.circle=""; S.division=""; S.substation=""; }
+    else if (k==="discom") { S.zone=""; S.circle=""; S.division=""; S.substation=""; }
+    else if (k==="zone") { S.circle=""; S.division=""; S.substation=""; }
+    else if (k==="circle") { S.division=""; S.substation=""; }
+    else if (k==="division") { S.substation=""; }
+    S.circleManualLevel = null;
+    syncCascade();
+    render();
+  });
+}
+function renderCircles(){
+  const level = getCircleLevel();
+  document.querySelectorAll("#circleLevelSeg button").forEach(b => b.setAttribute("aria-pressed", b.dataset.level===level));
+  renderCircleBreadcrumbs(level);
+
+  const q = S.circleSearch.toLowerCase();
+  const base = SR.filter(r =>
+    inSel(r) &&
+    (!S.zone || r.zone===S.zone) &&
+    (!S.circle || r.circle===S.circle) &&
+    (!S.division || r.division===S.division) &&
+    (!S.substation || r.substation===S.substation)
+  );
+
+  const groups = new Map();
+  base.forEach(r => {
+    let name = "", parent = "", key = "";
+    if (level==="discom") { name=r.discom; parent=DISCOM_FULL[r.discom]||"UPPCL"; key=name; }
+    else if (level==="zone") { name=r.zone; parent=r.discom; key=`${r.discom}|${name}`; }
+    else if (level==="circle") { name=r.circle; parent=r.zone; key=`${r.discom}|${r.zone}|${name}|${r.amisp}`; }
+    else if (level==="division") { name=r.division; parent=r.circle; key=`${r.discom}|${r.zone}|${r.circle}|${name}|${r.amisp}`; }
+    else { name=r.substation; parent=r.division; key=`${r.discom}|${r.zone}|${r.circle}|${r.division}|${name}|${r.amisp}`; }
+    if (!groups.has(key)) {
+      groups.set(key, {
+        name: name||"—", parent: parent||"—", amisps: new Set(),
+        discom: r.discom, zone: r.zone, circle: r.circle, division: r.division, substation: r.substation, singleAmisp: r.amisp,
+        feeders:0, mtr_mf:0, mf_mm:0, mtr_mm:0, div_mm:0, ss_mm:0, not_done:0
+      });
+    }
+    const g = groups.get(key);
+    g.amisps.add(r.amisp);
+    g.feeders += (+r.feeders||0);
+    g.mtr_mf += (+r["Meter No & MF Matched"]||0);
+    g.mf_mm += (+r["Meter No Matched, MF Mismatched"]||0);
+    g.mtr_mm += (+r["Meter No Mismatched"]||0);
+    g.div_mm += (+r["Division mismatch"]||0);
+    g.ss_mm += (+r["Subtation mismatch"]||0);
+    g.not_done += (+r["Mapping not done"]||0);
+  });
+
+  let rs = [...groups.values()].map(g => ({
+    ...g,
+    amisp: [...g.amisps].sort().join(", "),
+    pct: pct(g.mtr_mf, g.feeders)
+  })).filter(r => !q || (r.name+" "+r.parent+" "+r.amisp+" "+r.zone+" "+r.circle).toLowerCase().includes(q));
+
+  const {k,dir} = S.circleSort, c = CC.find(x=>x.k===k) || CC[5];
+  rs.sort((a,b)=> c.n ? (a[k]-b[k])*dir : String(a[k]).localeCompare(String(b[k]))*dir);
+  $("#circleCount").textContent = `${rs.length} ${level}${rs.length===1?"":"s"}`;
+  S.circleCsv = { level, rows: rs };
+
+  const pillCls = p => p>=95 ? "p-ok" : p>=85 ? "p-warn" : "p-bad";
+  $("#circleHead").innerHTML = `<tr>${CC.map(x=>`<th class="${x.n?"n":""}" aria-sort="${x.k===k?(dir>0?"ascending":"descending"):"none"}"><button type="button" data-k="${esc(x.k)}">${esc(x.t)}</button></th>`).join("")}</tr>`;
+  $("#circleHead").querySelectorAll("th button").forEach(b => b.onclick = () => {
+    const kk = b.dataset.k;
+    S.circleSort = {k:kk, dir: S.circleSort.k===kk ? -S.circleSort.dir : (CC.find(x=>x.k===kk).n ? -1 : 1)};
+    renderCircles();
+  });
+
+  $("#circleBody").innerHTML = rs.length ? rs.map((r, idx) => `
+    <tr class="drill" data-idx="${idx}" title="Click to drill down">
+      <td><b>${esc(r.name)}</b></td>
+      <td class="muted">${esc(r.parent)}</td>
+      <td class="nw">${esc(r.amisp)}</td>
+      <td class="n">${fmt(r.feeders)}</td>
+      <td class="n">${fmt(r.mtr_mf)}</td>
+      <td class="n"><span class="pill ${pillCls(r.pct)}">${fp(r.pct)}</span></td>
+      <td class="n">${fmt(r.mf_mm)}</td>
+      <td class="n">${fmt(r.mtr_mm)}</td>
+      <td class="n">${fmt(r.div_mm)}</td>
+      <td class="n">${fmt(r.ss_mm)}</td>
+      <td class="n" style="${r.not_done>0?"color:var(--bad);font-weight:600":""}">${fmt(r.not_done)}</td>
+    </tr>`).join("") : `<tr><td colspan="${CC.length}" class="muted">No rows match the current filter.</td></tr>`;
+
+  $("#circleBody").querySelectorAll("tr.drill").forEach(tr => tr.onclick = () => {
+    const r = rs[+tr.dataset.idx];
+    if (!r) return;
+    if (level==="discom") { S.discom = r.discom; S.circleManualLevel = "zone"; }
+    else if (level==="zone") { S.discom = r.discom; S.zone = r.zone; S.circleManualLevel = "circle"; }
+    else if (level==="circle") { S.discom = r.discom; S.zone = r.zone; S.circle = r.circle; if (r.amisps.size===1) S.amisp = r.singleAmisp; S.circleManualLevel = "division"; }
+    else if (level==="division") { S.discom = r.discom; S.zone = r.zone; S.circle = r.circle; S.division = r.division; if (r.amisps.size===1) S.amisp = r.singleAmisp; S.circleManualLevel = "substation"; }
+    else { S.discom = r.discom; S.amisp = r.amisps.size===1 ? r.singleAmisp : ""; S.excSearch = r.name; $("#excSearch").value = r.name; syncCascade(); show("exceptions"); location.hash = "#exceptions"; render(); return; }
+    syncCascade();
+    render();
+  });
+
+  const tot = rs.reduce((a,r)=>({feeders:a.feeders+r.feeders, mtr_mf:a.mtr_mf+r.mtr_mf, mf_mm:a.mf_mm+r.mf_mm, mtr_mm:a.mtr_mm+r.mtr_mm, div_mm:a.div_mm+r.div_mm, ss_mm:a.ss_mm+r.ss_mm, not_done:a.not_done+r.not_done}), {feeders:0,mtr_mf:0,mf_mm:0,mtr_mm:0,div_mm:0,ss_mm:0,not_done:0});
+  const totPct = pct(tot.mtr_mf, tot.feeders);
+  $("#circleFoot").innerHTML = `<tr class="grand">
+    <td>Total (${rs.length})</td>
+    <td>${esc(level.toUpperCase())}</td>
+    <td>—</td>
+    <td class="n">${fmt(tot.feeders)}</td>
+    <td class="n">${fmt(tot.mtr_mf)}</td>
+    <td class="n"><span class="pill ${pillCls(totPct)}">${fp(totPct)}</span></td>
+    <td class="n">${fmt(tot.mf_mm)}</td>
+    <td class="n">${fmt(tot.mtr_mm)}</td>
+    <td class="n">${fmt(tot.div_mm)}</td>
+    <td class="n">${fmt(tot.ss_mm)}</td>
+    <td class="n">${fmt(tot.not_done)}</td>
+  </tr>`;
+}
+document.querySelectorAll("#circleLevelSeg button").forEach(b => b.onclick = () => { S.circleManualLevel = b.dataset.level; renderCircles(); });
 $("#circleSearch").oninput = e => {S.circleSearch=e.target.value; renderCircles();};
 
 /* ---------- exceptions ---------- */
@@ -802,8 +975,10 @@ function csvReport(){
   saveCsv(`AMISP_status_report_${S.view==="Direct"?"direct":"direct_manual"}`, R.hdr, R.rows);
 }
 function csvCircles(){
+  const C = S.circleCsv;
+  if (!C) return;
   const hdr = CC.map(x=>x.k==="pct"?"Match % (Meter & MF matched / feeders)":x.t);
-  saveCsv("AMISP_circle_wise", hdr, S.circleCsv.map(r=>CC.map(x=> x.k==="pct" ? (isNaN(r.pct)?"":+r.pct.toFixed(1)) : r[x.k])));
+  saveCsv(`AMISP_${C.level}_wise`, hdr, C.rows.map(r=>CC.map(x=> x.k==="pct" ? (isNaN(r.pct)?"":+r.pct.toFixed(1)) : r[x.k])));
 }
 function csvLeague(){
   const L = S.leagueCsv;

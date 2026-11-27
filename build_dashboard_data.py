@@ -63,6 +63,19 @@ def main():
         for k in CATS: r[k] = int((g.remark == k).sum())
         circ.append(r)
 
+    # substations (Others feeders, full hierarchy for drilldown & cascading filters)
+    subs = []
+    for (d, am, z, c, dv, ss), g in o.groupby(["discom", "amisp", "zone", "circle", "division", "substation"]):
+        subs.append([
+            d, am, z, c, dv, ss, len(g),
+            int((g.remark == CATS[0]).sum()),
+            int((g.remark == CATS[1]).sum()),
+            int((g.remark == CATS[2]).sum()),
+            int((g.remark == CATS[3]).sum()),
+            int((g.remark == CATS[4]).sum()),
+            int((g.remark == CATS[5]).sum()),
+        ])
+
     lookup = [{"discom": d, "amisp": am, "lookup": lk or "(blank)", "n": len(g)}
               for (d, am, lk), g in m.groupby(["discom", "amisp", "lookup"])]
 
@@ -107,6 +120,7 @@ def main():
                  "built": datetime.datetime.now().strftime("%d.%m.%Y %H:%M"), "workbook": a.workbook.split("\\")[-1].split("/")[-1],
                  "order": ORDER, "cats": CATS},
         "summary": summary, "circles": circ, "lookup": lookup, "master": master,
+        "substations": {"cols": ["discom", "amisp", "zone", "circle", "division", "substation", "feeders", *CATS], "rows": subs},
         "exceptions": {"cols": exc_cols, "rows": exc.values.tolist()},
         "counts": {"mapping_rows": int(len(m)), "others": int(len(o)), "master_rows": int(len(am))},
     }
