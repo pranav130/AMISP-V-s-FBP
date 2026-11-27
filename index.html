@@ -481,7 +481,7 @@ if (store.get("amisp-collapsed")==="1") app.classList.add("collapsed");
 $("#collapse").onclick = () => { app.classList.toggle("collapsed"); store.set("amisp-collapsed", app.classList.contains("collapsed")?"1":"0"); if (chVolumes) setTimeout(() => chVolumes.resize(), 220); };
 const PAGES = ["overview","report","sources","circles","exceptions","method"];
 /* which filters change the figures on each page */
-const FILTERS = {overview:["discom","amisp","view"], report:["view"], sources:["discom","amisp"], circles:["discom","amisp","zone","circle","division","substation"], exceptions:["discom","amisp"], method:[]};
+const FILTERS = {overview:["discom","amisp","view"], report:["view"], sources:["discom","amisp","view"], circles:["discom","amisp","zone","circle","division","substation","view"], exceptions:["discom","amisp","view"], method:["view"]};
 function show(p){
   if (!PAGES.includes(p)) p = "overview";
   document.querySelectorAll(".page").forEach(s => s.hidden = s.dataset.page!==p);
@@ -861,14 +861,15 @@ function renderCircles(){
       });
     }
     const g = groups.get(key);
+    const pfx = S.view==="Direct" ? "d_" : "";
     g.amisps.add(r.amisp);
     g.feeders += (+r.feeders||0);
-    g.mtr_mf += (+r["Meter No & MF Matched"]||0);
-    g.mf_mm += (+r["Meter No Matched, MF Mismatched"]||0);
-    g.mtr_mm += (+r["Meter No Mismatched"]||0);
-    g.div_mm += (+r["Division mismatch"]||0);
-    g.ss_mm += (+r["Subtation mismatch"]||0);
-    g.not_done += (+r["Mapping not done"]||0);
+    g.mtr_mf += (+r[pfx+"Meter No & MF Matched"]||0);
+    g.mf_mm += (+r[pfx+"Meter No Matched, MF Mismatched"]||0);
+    g.mtr_mm += (+r[pfx+"Meter No Mismatched"]||0);
+    g.div_mm += (+r[pfx+"Division mismatch"]||0);
+    g.ss_mm += (+r[pfx+"Subtation mismatch"]||0);
+    g.not_done += (+r[pfx+"Mapping not done"]||0);
   });
 
   let rs = [...groups.values()].map(g => ({
@@ -945,25 +946,26 @@ $("#circleSearch").oninput = e => {S.circleSearch=e.target.value; renderCircles(
 
 /* ---------- exceptions ---------- */
 const EC = D.exceptions.cols, ER = D.exceptions.rows.map(r=>Object.fromEntries(EC.map((c,i)=>[c,r[i]])));
+const curRemark = r => S.view==="Direct" && r.d_remark ? r.d_remark : r.remark;
 const EXC_CATS = [["Mapping not done","--c6"],["Subtation mismatch","--c3"],["Meter No Mismatched","--c3"],["Meter No Matched, MF Mismatched","--c2"],["Division mismatch","--c4"]];
 const remarkPill = r => { const c = r==="Meter No Matched, MF Mismatched"||r==="Division mismatch" ? "p-warn" : "p-bad"; return `<span class="pill ${c}">${esc(r)}</span>`; };
 function excFiltered(){
   const q = S.excSearch.toLowerCase();
-  return ER.filter(r => inSel(r) && (!S.excCat || r.remark===S.excCat) &&
+  return ER.filter(r => inSel(r) && curRemark(r)!=="Meter No & MF Matched" && (!S.excCat || curRemark(r)===S.excCat) &&
     (!q || [r.feeder,r.substation,r.division,r.circle,r.zone,r.meter,r.a_meter,r.a_feeder].join(" ").toLowerCase().includes(q)));
 }
 function renderExceptions(){
-  const base = ER.filter(inSel);
+  const base = ER.filter(r => inSel(r) && curRemark(r)!=="Meter No & MF Matched");
   $("#navCnt").textContent = fmt(base.length);
   $("#excChips").innerHTML = `<button type="button" class="chip" data-c="" aria-pressed="${!S.excCat}">All <b>${fmt(base.length)}</b></button>` +
-    EXC_CATS.map(([c,v])=>`<button type="button" class="chip" data-c="${esc(c)}" aria-pressed="${S.excCat===c}"><i style="background:var(${v})"></i>${esc(c)} <b>${fmt(base.filter(r=>r.remark===c).length)}</b></button>`).join("");
+    EXC_CATS.map(([c,v])=>`<button type="button" class="chip" data-c="${esc(c)}" aria-pressed="${S.excCat===c}"><i style="background:var(${v})"></i>${esc(c)} <b>${fmt(base.filter(r=>curRemark(r)===c).length)}</b></button>`).join("");
   $("#excChips").querySelectorAll(".chip").forEach(b=>b.onclick=()=>{S.excCat=b.dataset.c; S.excLimit=100; renderExceptions();});
   const rs = excFiltered(), LIM = S.excLimit;
   $("#excCount").textContent = rs.length>LIM ? `Showing ${fmt(LIM)} of ${fmt(rs.length)} feeders` : `${fmt(rs.length)} feeders`;
   const head = `<thead><tr><th>Discom</th><th>Circle / Division</th><th>Substation</th><th>Portal feeder</th><th>Portal meter · MF</th><th>AMISP feeder</th><th>AMISP meter · MF</th><th>Status</th><th>Found by</th></tr></thead>`;
   const body = rs.slice(0,LIM).map(r=>{
     const mm = r.meter && r.a_meter && r.meter.toUpperCase()!==r.a_meter.toUpperCase();
-    return `<tr><td class="nw">${esc(r.discom)}<br><span class="muted">${esc(r.amisp)}</span></td><td>${esc(r.circle)}<br><span class="muted">${esc(r.division)}</span></td><td>${esc(r.substation)}${r.a_ss&&r.a_ss!==r.substation?`<br><span class="muted">AMISP: ${esc(r.a_ss)}</span>`:""}</td><td>${esc(r.feeder)}</td><td class="mono">${esc(r.meter)} · ${esc(r.mf)}</td><td>${esc(r.a_feeder)||'<span class="muted">—</span>'}</td><td class="mono" style="${mm?"color:var(--bad)":""}">${esc(r.a_meter)||"—"} · ${esc(r.a_mf)||"—"}</td><td>${remarkPill(r.remark)}</td><td class="muted">${esc(r.lookup)}</td></tr>`;
+    return `<tr><td class="nw">${esc(r.discom)}<br><span class="muted">${esc(r.amisp)}</span></td><td>${esc(r.circle)}<br><span class="muted">${esc(r.division)}</span></td><td>${esc(r.substation)}${r.a_ss&&r.a_ss!==r.substation?`<br><span class="muted">AMISP: ${esc(r.a_ss)}</span>`:""}</td><td>${esc(r.feeder)}</td><td class="mono">${esc(r.meter)} · ${esc(r.mf)}</td><td>${esc(r.a_feeder)||'<span class="muted">—</span>'}</td><td class="mono" style="${mm?"color:var(--bad)":""}">${esc(r.a_meter)||"—"} · ${esc(r.a_mf)||"—"}</td><td>${remarkPill(curRemark(r))}</td><td class="muted">${esc(r.lookup)}</td></tr>`;
   }).join("");
   const cg = `<colgroup>${[7,13,12,16,10,15,10,11,6].map(w=>`<col style="width:${w}%">`).join("")}</colgroup>`;
   $("#excTable").innerHTML = cg + head + `<tbody>${body || `<tr><td colspan="9" class="muted">No feeders match.</td></tr>`}</tbody>`;
@@ -983,7 +985,8 @@ function saveCsv(name, hdr, rows){
 }
 function csvExceptions(){
   const hdr = ["Discom","AMISP","Zone","Circle","Division","Substation","Portal feeder","Portal meter","Portal MF","AMISP feeder","AMISP meter","AMISP MF","AMISP division","AMISP substation","Status","Matching","Found by"];
-  saveCsv("AMISP_feeders_needing_correction", hdr, excFiltered().map(r=>EC.map(c=>r[c])));
+  const keys = ["discom","amisp","zone","circle","division","substation","feeder","meter","mf","a_feeder","a_meter","a_mf","a_div","a_ss"];
+  saveCsv(`AMISP_feeders_needing_correction_${S.view==="Direct"?"direct":"direct_manual"}`, hdr, excFiltered().map(r=>[...keys.map(k=>r[k]), curRemark(r), r.match, r.lookup]));
 }
 function csvReport(){
   const R = S.reportCsv;

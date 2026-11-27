@@ -49,10 +49,12 @@ def main():
         "a_div": m["AMISP Division"].map(s), "a_ss": m["AMISP substation name"].map(s),
         "a_feeder": m["AMISP feeder name"].map(s), "a_meter": m["AMISP Meter No."].map(s),
         "a_mf": m["AMISP MF"].map(s), "remark": m[pick("Remark_")].map(s),
+        "d_remark": m[pick("Direct Matching Remark_")].map(s),
         "match": m["Matching remark"].map(s), "lookup": m["Lookup by"].map(s) if "Lookup by" in cols else m["Lookup By"].map(s),
     })
     m = m[m.feeder != ""]
     m.loc[m.remark == "", "remark"] = "Mapping not done"
+    m.loc[m.d_remark == "", "d_remark"] = "Mapping not done"
     o = m[m.type.str.upper() == "OTHERS"]
 
     # circles (Others feeders, all matching = manual view)
@@ -63,25 +65,21 @@ def main():
         for k in CATS: r[k] = int((g.remark == k).sum())
         circ.append(r)
 
-    # substations (Others feeders, full hierarchy for drilldown & cascading filters)
+    # substations (Others feeders, full hierarchy for drilldown & cascading filters, both Manual & Direct)
     subs = []
     for (d, am, z, c, dv, ss), g in o.groupby(["discom", "amisp", "zone", "circle", "division", "substation"]):
         subs.append([
             d, am, z, c, dv, ss, len(g),
-            int((g.remark == CATS[0]).sum()),
-            int((g.remark == CATS[1]).sum()),
-            int((g.remark == CATS[2]).sum()),
-            int((g.remark == CATS[3]).sum()),
-            int((g.remark == CATS[4]).sum()),
-            int((g.remark == CATS[5]).sum()),
+            *[int((g.remark == k).sum()) for k in CATS],
+            *[int((g.d_remark == k).sum()) for k in CATS],
         ])
 
     lookup = [{"discom": d, "amisp": am, "lookup": lk or "(blank)", "n": len(g)}
               for (d, am, lk), g in m.groupby(["discom", "amisp", "lookup"])]
 
     exc_cols = ["discom", "amisp", "zone", "circle", "division", "substation", "feeder", "meter", "mf",
-                "a_feeder", "a_meter", "a_mf", "a_div", "a_ss", "remark", "match", "lookup"]
-    exc = o[o.remark != "Meter No & MF Matched"][exc_cols]
+                "a_feeder", "a_meter", "a_mf", "a_div", "a_ss", "remark", "d_remark", "match", "lookup"]
+    exc = o[(o.remark != "Meter No & MF Matched") | (o.d_remark != "Meter No & MF Matched")][exc_cols]
 
     # ---------- AMISP feeder master ----------
     am = pd.read_excel(a.workbook, sheet_name="AMISP feeder master", dtype=str, usecols="A:L")
@@ -120,7 +118,7 @@ def main():
                  "built": datetime.datetime.now().strftime("%d.%m.%Y %H:%M"), "workbook": a.workbook.split("\\")[-1].split("/")[-1],
                  "order": ORDER, "cats": CATS},
         "summary": summary, "circles": circ, "lookup": lookup, "master": master,
-        "substations": {"cols": ["discom", "amisp", "zone", "circle", "division", "substation", "feeders", *CATS], "rows": subs},
+        "substations": {"cols": ["discom", "amisp", "zone", "circle", "division", "substation", "feeders", *CATS, *[f"d_{k}" for k in CATS]], "rows": subs},
         "exceptions": {"cols": exc_cols, "rows": exc.values.tolist()},
         "counts": {"mapping_rows": int(len(m)), "others": int(len(o)), "master_rows": int(len(am))},
     }
